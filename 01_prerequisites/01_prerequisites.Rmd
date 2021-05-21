@@ -5,6 +5,7 @@ output:
 ---
 
 ```{r include=FALSE}
+options(width=120)
 knitr::opts_chunk$set(comment=NA, fig.align="center")
 ```
 
