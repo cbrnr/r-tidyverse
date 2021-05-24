@@ -123,6 +123,15 @@ factor(c("A", "A", "B", "A", "C", "C", "A", "B"))  # factor with three levels
 as.Date(c("17.3.2020", "22.5.2020", "3.3.2021"), format="%d.%m.%Y")  # datetime
 ```
 
+We can access individual elements of a vector using square brackets, which contain the indexes of all elements we would like to access:
+
+```{r}
+x <- 1:10
+x[5]  # fifth element
+x[c(7, 1, 4)]  # elements with index 7, 1, and 4
+x[x >= 5]  # all elements >= 5
+```
+
 ### Data frames
 A data frame is a collection of vectors (with identical lengths). In other words, it represents a table consisting of rows and columns for storing rectangular data.
 
@@ -160,3 +169,10 @@ length(tmp)
 
 ### Help
 You can view the documentation for any object by prepending a `?` to the object name, for example `?length` shows the help page for the `length` function. You can also press F1 to display help for the object at the current cursor location.
+
+## Exercices
+1. Install the `tidyverse`, `nycflights13`, and `palmerpenguins` packages. After that, check if you have the packages `readr`, `dplyr`, `ggplot2`, and `tidyr` installed (you should).
+2. What is your current working directory? Create a new directory called `tidyverse-workshop` in your home directory (use Windows Explorer, macOS Finder or the "Files" pane in RStudio to navigate and create the directory). Then set the working directory to this folder. Check again if the current working directory now points to the correct location.
+3. Compute the areas of circles with diameters 5, 7, 19, and $\pi^{-\frac{1}{2}}$. Put all diameters into a vector `r` and compute the results with one command!
+4. Create a vector of 100 random numbers drawn from a standard normal distribution using the function `rnorm()`. Then extract all positive numbers from this random vector &ndash; how many elements are positive?
+5. How many rows and columns does the built-in `mtcars` data frame have? What are the column data types? What does the `drat` column mean?
