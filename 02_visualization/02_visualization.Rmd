@@ -1,0 +1,184 @@
+---
+title: "Visualization"
+output:
+  html_document
+---
+
+```{r include=FALSE}
+options(width=120)
+knitr::opts_chunk$set(comment=NA, fig.align="center")
+```
+
+## Introduction
+Data needs to be imported, tidied, and transformed before any visualization can be created. We will discuss these steps, which are necessary for almost all real-world data sets, in the following chapters. However, because we will use tidy example data sets that are available in R, we will focus on creating visualizations first.
+
+We will use the [ggplot2](https://ggplot2.tidyverse.org/) package, which is based on a layered "grammar of graphics" described in [this article](http://vita.had.co.nz/papers/layered-grammar.pdf). In this short chapter, we will mention only the most basic commands that enable you to quickly create simple (but beautiful) visualizations.
+
+The first step is to activate the package:
+
+```{r}
+library(ggplot2)
+```
+
+Note that you could also use `library(tidyverse)` instead, because `ggplot2` is part of the `tidyverse` package.
+
+## Basic usage
+The ggplot2 package contains an example data frame called `mpg`. It is a good idea to read its documentation (`?mpg`) before moving on to the next step. Let's take a look at the data:
+
+```{r}
+mpg
+```
+
+Here's the first question we want to answer from this data set: Do cars with big engines consume more or less fuel than cars with small engines? We can use the variables `displ` (engine size in liters) and `hwy` (fuel efficiency on the highway in miles per gallon) to try to address the question.
+
+Let's create our first plot using the following code (just copy and run this code for now):
+
+```{r}
+ggplot(data=mpg) +
+    geom_point(mapping=aes(x=displ, y=hwy))
+```
+
+This scatterplot shows a clear negative relation, meaning that larger engines tend to have lower fuel efficiency. 
+
+All ggplot2 plots start with calling the `ggplot()` function, to which we pass a data frame that contains the data to be plotted (using the `data` argument). This function call on its own just produces an empty plot, because we haven't specified any details about our plot.
+
+To add something interesting to the plot, we literally add another layer. In this example, the new layer should contain points, which we can create with the `geom_point()` function. The ggplot2 package contains many geom functions that enable us to create many different kinds of plots. They all have a `mapping` argument, which receives a mapping of how specific columns in the data frame should be represented &ndash; note that this mapping needs to be wrapped inside an `aes()` function. In our example, we map the `displ` column to the `x` axis and the `hwy` column to the `y` axis, resulting in a scatterplot.
+
+We can use the code from this example as a template for ggplot2 plots. It looks as follows:
+
+```{r eval=FALSE}
+ggplot(data=<DATA>) +
+    <GEOM_FUNCTION>(mapping=aes(<MAPPINGS>))
+```
+
+Note that this template is not valid R code! We need to replace all code in angle brackets with our actual data, geom function, and mappings.
+
+### Exercises
+1. What does `ggplot(data=mpg)` produce?
+2. How many rows and columns does `mpg` consist of? What are the column data types?
+3. What does the `drv` column describe?
+4. Efficient cars should consume less fuel on both highways and in cities than inefficient cars. Create a scatterplot to investigate this hypothesis!
+5. How does highway fuel efficiency correlate with the number of cylinders?
+6. Why is the scatterplot of `class` versus `drv` not very useful?
+7. Do you see any problem with the scatterplot `displ` versus `hwy` that we produced previously? (Hint: the plot does not show all 234 individual data points contained in the `mpg` data frame.)
+
+## Aesthetic mappings
+Aesthetics are visual properties in a plot. We have already used the `x` and `y` aesthetics in our previous `mpg` example when we mapped these aesthetics to variables (columns) `displ` and `hwy` in `geom_point(mapping=aes(x=displ, y=hwy))`. We have also noted that we need to wrap aesthetic mappings with the `aes()` function.
+
+There are other aesthetics that we could map data to. For example, we could use the `color` aesthetic to visualize a third variable in the data, for example `class`, which lists the type (or class) of car:
+
+```{r}
+ggplot(data=mpg) +
+    geom_point(mapping=aes(x=displ, y=hwy, color=class))
+```
+
+The original scatterplot now conveys additional information on the types of vehicles. Notice that ggplot2 automatically adds a legend. Instead of `color`, we could also use the `shape`, `size` or `alpha` aesthetics (try it out and see what the result looks like). The documentation of the `geom_point()` function lists all supported aesthetics. It is also possible to use multiple aesthetics for the same variable, so the previous example could be extended to also use different shapes depending on `class`:
+
+```{r}
+ggplot(data=mpg) +
+    geom_point(mapping=aes(x=displ, y=hwy, color=class, shape=class))
+```
+
+If you ever want to manually set an aesthetic to a fixed value (not depending on data values), such as plotting all points in blue, you need to specify this outside of the `aes()` function:
+
+```{r}
+ggplot(data=mpg) +
+    geom_point(mapping=aes(x=displ, y=hwy), color="blue")
+```
+
+### Exercises
+See https://r4ds.had.co.nz/data-visualisation.html#exercises-1.
+
+## Facets
+Facets can be used to split a plot into multiple subplots, each of which shows only a subset of the original data. There are two functions that create facets based on variables (columns) in the data:
+
+- `facet_wrap()` facets by one variable; use `~ <VARIABLE>` as its first argument.
+- `facet_grid()` facets by two variables; use `<VARIABLE_ROWS> ~ <VARIABLE_COLS>` as its first argument.
+
+It's very easy to add facetting to an existing plot by adding this function (as if it was a new layer). Here are two examples demonstrating this:
+
+```{r}
+ggplot(data=mpg) +
+    geom_point(mapping=aes(x=displ, y=hwy)) +
+    facet_wrap(~ class, nrow=2)
+ggplot(data=mpg) +
+    geom_point(mapping=aes(x=displ, y=hwy)) +
+    facet_grid(drv ~ cyl)
+```
+
+### Exercises
+See https://r4ds.had.co.nz/data-visualisation.html#exercises-2.
+
+## Composing plots
+Facets create subplots based on subsets of the data. If instead you want to combine multiple *independent* plots, I recommend the [patchwork](https://patchwork.data-imaginist.com/) package. Using operators such as `+`, `|`, and `/`, it is intuitive to create custom arrangements of existing `ggplot` objects (which we need to store in objects for easier access), for example:
+
+```{r}
+library(patchwork)
+
+p1 <- ggplot(data=mpg) +
+    geom_point(mapping=aes(x=hwy, y=cty))
+p2 <- ggplot(data=mtcars) +
+    geom_boxplot(mapping=aes(x=cyl, y=qsec, group=cyl))
+p3 <- ggplot(data=mpg) +
+    geom_point(mapping=aes(x=displ, y=hwy))
+
+(p1 | p2) / p3
+```
+
+Please refer to the patchwork documentation and website for more details. 
+
+## Geometric objects
+Consider the following two plots:
+
+```{r message=FALSE, fig.height=3}
+p1 <- ggplot(data=mpg) +
+    geom_point(mapping=aes(x=displ, y=hwy))
+p2 <- ggplot(data=mpg) +
+    geom_smooth(mapping=aes(x=displ, y=hwy))
+p1 | p2
+```
+
+These plots show the same data (`displ` versus `hwy`), but they use different visual representations. Whereas the left plot visualizes each data point, the right plot represents the same data with a smoothing function. In ggplot2, we call these different visual representations *geoms* (geometric objects). The [Data Visualization cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf) lists some of the over 40 available geoms in ggplot2.
+
+Every geom function takes a `mapping` argument where you specify which data columns should be mapped to which aesthetics. Note that any given geom supports only aesthetics that make sense (check the documentation to find out). For example, you can set the `shape` of a point, but the `shape` of a line does not make sense (so `geom_line` does not support it). However, you could use the `linetype` aesthetic instead.
+
+```{r message=FALSE, fig.height=3}
+p1 <- ggplot(data=mpg) +
+    geom_point(mapping=aes(x=displ, y=hwy, shape=drv))
+p2 <- ggplot(data=mpg) +
+    geom_smooth(mapping=aes(x=displ, y=hwy, linetype=drv))
+p1 | p2
+```
+
+Note that we can use multiple geoms in a plot by adding each as a new layer:
+
+```{r message=FALSE}
+ggplot(data=mpg) +
+    geom_point(mapping=aes(x=displ, y=hwy)) +
+    geom_smooth(mapping=aes(x=displ, y=hwy))
+```
+
+Because both geoms use the same `mapping` arguments, we could also specify a global `mapping` inside the `ggplot()` function call. All geoms will inherit this global mapping, and the resulting figure is identical to the previous one.
+
+```{r eval=FALSE}
+ggplot(data=mpg, mapping=aes(x=displ, y=hwy)) +
+    geom_point() +
+    geom_smooth()
+```
+
+Global and local mappings can be combined; if you don't specify a mapping for a particular geom function, the function will use the global mapping. However, if you do specify a local mapping by passing a `mapping` argument in a specific geom function, it will *extend* the global one:
+
+```{r message=FALSE}
+ggplot(data=mpg, mapping=aes(x=displ, y=hwy)) +
+    geom_point(mapping=aes(color=class)) +
+    geom_smooth()
+```
+
+We can also apply this concept of global and local settings to the `data` argument. This is useful if a particular layer is based on a different (sub)set of data.
+
+### Exercises
+See https://r4ds.had.co.nz/data-visualisation.html#exercises-3.
+
+## Statistical transformations
+
+## Position adjustments
