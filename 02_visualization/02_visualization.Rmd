@@ -180,5 +180,79 @@ We can also apply this concept of global and local settings to the `data` argume
 See https://r4ds.had.co.nz/data-visualisation.html#exercises-3.
 
 ## Statistical transformations
+Consider the following bar chart created with the `geom_bar()` function:
+
+```{r}
+ggplot(data=mpg) +
+    geom_bar(mapping=aes(x=class))
+```
+
+Notice how we only specified a mapping for the `x` aesthetic (the `class` column). However, the *y*-axis shows counts, a variable that is not contained in the data.
+
+Although many plots show the raw data (as we saw with scatterplots), other kinds of plots transform the original data to show counts of the binned data (like in the bar chart), summary statistics or predictions from a model fitted to the data. This works automatically, because each geom function is associated with a default statistical transformation. You can check the documentation of a geom to see its default transformation listed as the default argument for the `stat` parameter. For example, `geom_point()` uses `stat="identity"` (no transformation), whereas `geom_bar()` uses `stat="count"`.
+
+Sometimes, it is necessary to change the stat of a geom. For example, let's assume that we had the count data directly available in a data frame as follows:
+
+```{r}
+library(tibble)
+
+mpg_count <- tribble(
+  ~class,   ~count,
+  "2seater",     5,
+  "compact",    47,
+  "midsize",    41,
+  "minivan",    11,
+  "pickup",     33,
+  "subcompact", 35,
+  "suv",        62
+)
+```
+
+If we want to visualize this as a bar chart, we need to pass `stat="identity"`:
+
+```{r}
+ggplot(data=mpg_count) +
+    geom_bar(mapping=aes(x=class, y=count), stat="identity")
+```
+
+Finally, since each geom function has a default stat function, and each stat function has a default geom function, we can use these functions interchangeably. For example, `geom_bar` uses `stat_count` and `stat_count` uses `geom_bar` by default. Therefore, we can also produce the bar chart we have encountered previously with the following code:
+
+```{r eval=FALSE}
+ggplot(data=mpg) +
+    stat_count(mapping=aes(x=class))
+```
+
+### Exercises
+See https://r4ds.had.co.nz/data-visualisation.html#exercises-4.
 
 ## Position adjustments
+Finally, geoms have a `position` argument, which influences how charts are visualized when certain grouping aesthetics are used. Consider the following bar chart:
+
+```{r}
+ggplot(data=mpg) +
+    geom_bar(mapping=aes(x=class, fill=drv))
+```
+
+This is a stacked bar chart, because it uses `position="stack"` by default. If you don't want a stacked bar chart, you can also use `"identity"`, `"dodge"` or `"fill"`:
+
+```{r}
+ggplot(data=mpg) +
+    geom_bar(mapping=aes(x=class, color=drv), position="identity", fill=NA)
+ggplot(data=mpg) +
+    geom_bar(mapping=aes(x=class, fill=drv), position="dodge")
+ggplot(data=mpg) +
+    geom_bar(mapping=aes(x=class, fill=drv), position="fill")
+```
+
+### Exercises
+See https://r4ds.had.co.nz/data-visualisation.html#exercises-5.
+
+## Coordinate systems
+Most ggplot2 plots use the Cartesian coordinate system spanned by two axes *x* and *y*. However, it is possible to change the coordinate system with so-called *coord* functions. We won't go into any detail here, mostly because knowing how to tewak coordinate systems is quite an advanced topic that is not relevant for many real-world plots. However, there is one handy function that you should remember: `coord_flip()` flips the *x* and *y* axes. You can simply add it like an additional layer to an existing plot:
+
+```{r}
+ggplot(data=mpg, mapping=aes(x=class, y=hwy)) +
+    geom_boxplot() +
+    coord_flip()
+```
+
