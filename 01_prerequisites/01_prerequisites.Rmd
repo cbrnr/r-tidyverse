@@ -5,20 +5,20 @@ output:
 ---
 
 ```{r include=FALSE}
-options(width=120)
+options(width=110)
 knitr::opts_chunk$set(comment=NA, fig.align="center")
 ```
 
 ## Tidyverse
 The [Tidyverse](https://www.tidyverse.org/) is a collection of R packages that are designed to work well together. Their fundamental assumption is that data is represented in a so-called "tidy" format, which basically means that it fits into a table where a row corresponds to an observation and a column corresponds to a variable (more details are available in [this article](https://www.jstatsoft.org/article/view/v059i10)).
 
-Here's how a typical data science workflow looks like:
+Here's what a typical data science workflow looks like:
 
 ```{r echo=FALSE, fig.cap="Data science workflow (adapted from [here](https://github.com/hadley/r4ds/blob/master/diagrams/data-science-wrangle.png)).", out.width="75%"}
 knitr::include_graphics("workflow.png")
 ```
 
-The Tidyverse offers packages that cover all aspects of this workflow. In this course, we will focus on data wrangling (the green box). In addition, we will also briefly discuss importing and visualizing data.
+The Tidyverse offers packages that cover all aspects of this workflow. In this course, we will focus on data wrangling (the green box). In addition, we will also briefly discuss importing and visualizing data. Modeling data and communicating results are outside the scope of this workshop.
 
 ## Prerequisites
 To get started with the Tidyverse, we need to install both [R](https://cloud.r-project.org/) and [RStudio](https://www.rstudio.com/products/rstudio/download/). Although RStudio is technically not required, I strongly recommend it because it makes working with R much more pleasant.
@@ -41,7 +41,7 @@ knitr::include_graphics("https://github.com/hadley/r4ds/blob/master/cover.png?ra
 
 ## R basics
 ### Packages
-A package contains additional functions that extend the capabilities of R. We install a package with the `install.packages()` function. In this workshop, we are going to use `tidyverse`, `nycflights13`, and `palmerpenguins`. To install them, run the following commands in the R console (note that package names must be surrounded by single or double quotes):
+A package contains additional functions that extend the capabilities of R. We install a package with the `install.packages()` function. In this workshop, we are going to use the `tidyverse`, `nycflights13`, and `palmerpenguins` packages. To install them, run the following commands in the R console (note that package names must be surrounded by single or double quotes):
 
 ```{r eval=FALSE}
 install.packages("tidyverse")
@@ -59,17 +59,17 @@ library(nycflights13)
 library(palmerpenguins)
 ```
 
-Note that we can also use functions contained in a package without activating by prepending the function name with the package name and two colons, for example `nycflights13::flights`.
+Note that we could also use functions contained in a package without activating by prepending the function name with the package name and two colons, for example `nycflights13::flights`.
 
 ### Working directory
 When R runs commands, it performs all computations in the so-called working directory. R expects all data files that you want to import in this directory (if not otherwise specified). The working directory can be any directory on your computer, and there are several options to change it.
 
-The function `getwd()` returns the current working directory. Alternatively, the subtitle of the "Console" pane in RStudio (bottom left in the default layout) displays the working directory.
+The function `getwd()` returns the current working directory. The subtitle of the "Console" pane in RStudio (bottom left in the default layout) also shows the working directory.
 
-The function `setwd()` sets the working directory to the folder passed as an argument, for example `setwd("C:/Users/myuser/R")` or equivalently `setwd("~/R")` (the tilde symbol is short for the current user's home directory). Note that directories need to be separated with a forward slash `/` even on Windows (which normally uses a backslash `\`). Alternative methods to change the working directory with RStudio include the "Session &ndash; Set Working Directory" menu and the "Files" pane (bottom right). Also, if you double-click an R script in Windows Explorer or macOS Finder, RStudio will open it and automatically set the working directory to the corresponding file location.
+The function `setwd()` sets the working directory to the folder passed as an argument, for example `setwd("C:/Users/myuser/R")` or equivalently `setwd("~/R")` (the tilde symbol is short for the current user's home directory). Note that directories need to be separated with a forward slash `/` even on Windows (which normally uses a backslash `\`). Alternative methods to change the working directory with RStudio include the "Session &ndash; Set Working Directory" menu and the "More" icon in the "Files" pane (bottom right). Also, if you double-click an R script in Windows Explorer or macOS Finder, RStudio will open it and automatically set the working directory to the corresponding file location.
 
 ### R code
-Typically, we enter R commands in the console. A prompt symbol `>` indicates that R is ready for our input (note that we do not show the prompt symbol in the gray code boxes). Once we hit the ⏎ (enter or return) key, R will immediately evaluate what we just typed and print the result. This workflow is called [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) (read-eval-print loop), and it is a convenient way to interactively work with R and try out new things. Here's an example of some commands with their outputs (try typing the commands into your console):
+Typically, we enter R commands in the console. A prompt symbol `>` indicates that R is ready for our input (note that we do not show the prompt symbol in the gray code boxes). Once we hit the ⏎ (enter or return) key, R will immediately evaluate what we just typed and print the result. This workflow is called [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) (read-eval-print loop), and it is a convenient way to interactively work with R and try out new things. Here's an example of some commands with their outputs (try typing these commands into your console):
 
 ```{r}
 1 + 9  # this is a comment
@@ -77,7 +77,7 @@ x <- 1:10  # the value of x is not printed
 sum(x)  # function call
 ```
 
-Notice that when creating a new object with the assignment operator `<-` (read "gets"), R does not automatically print its value. However, often it is useful to first assign a new object and then immediately inspect its value. We could do this with two lines of code:
+Notice that when creating a new object with the assignment operator `<-` (read "gets"), R does not automatically print its value. However, it is often useful to assign a new object and then immediately inspect its value. We could do this with two lines of code:
 
 ```{r}
 x <- 1:10
@@ -90,7 +90,13 @@ A more convenient way is to enclose the assignment in parentheses, which will bo
 (x <- 1:10)
 ```
 
-The console is nice to try out commands and play around with code (until it runs without errors). However, if we want to save a sequence of R commands for later use, we can put them into so-called R scripts. An R script is a plain-text file (ending in `.R`) containing R commands, usually one command per line. RStudio includes an editor (top left pane in the default layout), which can be used to write, edit, and run (parts of) a script.
+Whenever R outputs a vector, it automatically prepends the index of the first element in a line in square brackets. We only saw `[1]` in the previous outputs, because the values fitted into one line. If you print a longer vector, each line will show the position of its first element:
+
+```{r}
+(y <- 1:100)
+```
+
+The console is nice for trying out commands and playing around with code (until it runs without errors). However, if we want to store a sequence of R commands for later use, we can put them into so-called R scripts. An R script is a plain-text file (ending in `.R`) containing R commands, usually one command per line. RStudio includes an editor (top left pane in the default layout), which can be used to write, edit, and run (parts of) a script.
 
 In practise, a data analysis project stored as an R script can be run over and over again. This means if another person wants to reproduce your analysis, all you need to do is share your script and data files. The person then runs your entire script, for example by clicking on the "Source" icon, which fully reproduces the entire analysis and all results.
 
@@ -99,7 +105,7 @@ RStudio includes many useful keyboard shortcuts. It really pays off to remember 
 
 Here are four important shortcuts that everyone should use:
 
-- The ↑/↓ arrow keys access your command history. You can edit any command you pull up before running it.
+- The ↑/↓ arrow keys access the command history. You can edit any command you pull up before running it again.
 - If you are searching for a previously entered command starting with specific characters, enter the characters in the console and press ⌘&nbsp;↑ on macOS or Ctrl&nbsp;↑ on Windows and Linux.
 - The shortcut for the assignment operator `<-` is ⌥&nbsp;&ndash; (macOS) or Alt&nbsp;&ndash; (Windows and Linux).
 - Hitting ⌘&nbsp;⏎ (macOS) or Ctrl&nbsp;⏎ (Windows and Linux) in the editor runs the command under the cursor in the console.
@@ -123,7 +129,7 @@ factor(c("A", "A", "B", "A", "C", "C", "A", "B"))  # factor with three levels
 as.Date(c("17.3.2020", "22.5.2020", "3.3.2021"), format="%d.%m.%Y")  # datetime
 ```
 
-We can access individual elements of a vector using square brackets, which contain the indexes of all elements we would like to access:
+We can access individual elements of a vector using square brackets containing the indexes of all elements we would like to access:
 
 ```{r}
 x <- 1:10
@@ -139,18 +145,22 @@ A data frame is a collection of vectors (with identical lengths). In other words
 (df <- data.frame(x=1:5, y=c(6, -9.5, 166, 8.8, 0.112), z=c("A", "X", "X", "B", "A")))
 ```
 
-The Tidyverse package `tibble` provides an improved data frame type called tibble. A tibble is a drop-in replacement for a data frame, so we can use tibbles everywhere data frames are expected.
+The Tidyverse package `tibble` provides an improved data frame type called tibble. A tibble is a drop-in replacement for a data frame, so we can use tibbles (almost) everywhere data frames are expected.
 
 ```{r}
 tibble::tibble(x=1:5, y=c(6, -9.5, 166, 8.8, 0.112), z=c("A", "X", "X", "B", "A"))
 ```
 
-Note how data frames and tibbles print differently in the previous examples. Arguably, tibbles are more readable and include their dimension (`# A tibble: 5 x 3`) as well as column data types (`<int>`, `<dbl>`, and `<chr>`, which is short for integer, double, and character).
+Note how data frames and tibbles print differently in the previous examples. Tibbles are better readable and include their dimension (`# A tibble: 5 x 3`) as well as column data types (`<int>`, `<dbl>`, and `<chr>`, which is short for integer, double, and character). The `str()` function shows a convenient summary of the structure of a given data frame, which also contains the column data types:
 
-RStudio offers a nice integrated data frame viewer; the `View()` function will visualize any data frame or tibble in a spreadsheet-like environment. The data frame from the previous example can be viewed with `View(df)`.
+```{r}
+str(df)
+```
+
+RStudio offers a nice integrated data frame viewer: the `View()` function visualizes any data frame or tibble in a spreadsheet-like table. For example, the previously created data frame `df` can be viewed with `View(df)`.
 
 ### Functions
-Almost everything in R is a function. A function performs some pre-defined computations on (optional) input arguments and (optionally) returns a result. We routinely call functions that have been defined elsewhere, for example the `c()`, `class()`, and `length()` functions. A pair of parentheses `()` after a function name indicates that we are calling that function. We can also define our own functions, but this is an advanced topic outside the scope of this workshop.
+Almost everything in R is a function. A function performs some pre-defined computations on (optional) input arguments and (optionally) returns a result. We routinely call functions that have been defined elsewhere, for example the `c()`, `class()`, and `length()` functions. A pair of parentheses `()` after a function name indicates that we are calling that function. We can also define our own functions, but this is outside the scope of this workshop.
 
 Here are some examples for function calls:
 
@@ -168,11 +178,11 @@ length(tmp)
 ```
 
 ### Help
-You can view the documentation for any object by prepending a `?` to the object name, for example `?length` shows the help page for the `length` function. You can also press F1 to display help for the object at the current cursor location.
+You can view the documentation for any object by prepending a `?` to the object name. For example, `?length` shows the help page for the `length` function. You can also press F1 to display help for the object at the current cursor location.
 
 ## Exercices
 1. Install the `tidyverse`, `nycflights13`, and `palmerpenguins` packages. After that, check if you have the packages `readr`, `dplyr`, `ggplot2`, and `tidyr` installed (you should).
 2. What is your current working directory? Create a new directory called `tidyverse-workshop` in your home directory (use Windows Explorer, macOS Finder or the "Files" pane in RStudio to navigate and create the directory). Then set the working directory to this folder. Check again if the current working directory now points to the correct location.
-3. Compute the areas of circles with diameters 5, 7, 19, and $\pi^{-\frac{1}{2}}$. Put all diameters into a vector `r` and compute the results with one command!
+3. Compute the areas of circles with radiuses 5, 7, 19, and $\pi^{-\frac{1}{2}}$. Put all radiuses into a vector `r` and compute the results with one command!
 4. Create a vector of 100 random numbers drawn from a standard normal distribution using the function `rnorm()`. Then extract all positive numbers from this random vector &ndash; how many elements are positive?
 5. How many rows and columns does the built-in `mtcars` data frame have? What are the column data types? What does the `drat` column mean?
