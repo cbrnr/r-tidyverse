@@ -177,6 +177,42 @@ The last example shows two nested function calls. First, we call the `c()` funct
 length(tmp)
 ```
 
+### Missing values
+R represents missing values as `NA` ("not available"). Missing values are contagious, which means that calculations involving missing values will result in `NA`. This makes sense if you think of a missing value as "unknown" (we don't know what the value is). Here are some examples:
+
+```{r}
+NA + 1
+NA > 0
+1 == NA
+NA / 2
+```
+
+Even comparing `NA` with `NA` is again `NA`:
+
+```{r}
+NA == NA
+```
+
+Let's compute the mean of some numbers involving one missing value:
+
+```{r}
+(x <- c(25, 50, NA, 100))
+mean(x)
+```
+
+The mean is also unknown, because we cannot compute it because of the missing value. However, almost all aggregation functions support the `na.rm` argument, which by default (`FALSE`) does *not* remove missing values. If we set `na.rm=TRUE`, all missing values are removed before the actual function value is computed:
+
+```{r}
+mean(x, na.rm=TRUE)
+```
+
+To find out which values in a vector are missing, we can use the `is.na()` function:
+
+```{r}
+is.na(x)
+```
+
+
 ### Help
 You can view the documentation for any object by prepending a `?` to the object name. For example, `?length` shows the help page for the `length` function. You can also press F1 to display help for the object at the current cursor location.
 
