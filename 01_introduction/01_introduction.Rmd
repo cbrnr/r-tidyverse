@@ -23,7 +23,7 @@ The Tidyverse offers packages that cover all aspects of this workflow. In this c
 ## Prerequisites
 To get started with the Tidyverse, we need to install both [R](https://cloud.r-project.org/) and [RStudio](https://www.rstudio.com/products/rstudio/download/). Although RStudio is technically not required, I strongly recommend it because it makes working with R much more pleasant.
 
-Once you have these programs on your computer, start RStudio and install the `tidyverse` package, which is basically a meta-package consisting of the most important packages from the Tidyverse. We will also need the `nycflights13` and `palmerpenguins` packages, because they contain nice data sets that we will explore.
+Once you have these programs on your computer, start RStudio and install the `tidyverse` package, which is basically a meta-package consisting of the most important packages from the Tidyverse. We will also need the `nycflights13` and `palmerpenguins` packages, because they contain nice datasets that we will explore.
 
 We will now go through some basic R commands and workflows. Ideally, you should already be familiar with most of these topics. If not, this hopefully serves as a quick refresher. Note that we show R code in gray boxes and output/results in white boxes throughout the document, for example:
 

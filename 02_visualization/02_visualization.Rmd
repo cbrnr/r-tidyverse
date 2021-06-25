@@ -10,7 +10,7 @@ knitr::opts_chunk$set(comment=NA, fig.align="center")
 ```
 
 ## Introduction
-Data needs to be imported, tidied, and transformed before any visualization can be created. We will discuss these steps, which are necessary for almost all real-world data sets, in the following chapters. However, because we can use tidy example data sets that are already available in R, we will focus on creating visualizations first.
+Data needs to be imported, tidied, and transformed before any visualization can be created. We will discuss these steps, which are necessary for almost all real-world datasets, in the following chapters. However, because we can use tidy example datasets that are already available in R, we will focus on creating visualizations first.
 
 Specifically, we will use the [ggplot2](https://ggplot2.tidyverse.org/) package, which is part of the Tidyverse. It is based on a layered "grammar of graphics" described in [this article](http://vita.had.co.nz/papers/layered-grammar.pdf). In this chapter, we will mention only the most basic commands that enable you to quickly create simple (but beautiful) visualizations.
 
@@ -29,7 +29,7 @@ The ggplot2 package contains an example data frame called `mpg`. It is a good id
 mpg
 ```
 
-Here's the first question we want to answer from this data set: do cars with big engines consume more or less fuel than cars with small engines? We can use the variables `displ` (engine size in liters) and `hwy` (fuel efficiency on the highway in miles per gallon) to try to address this question.
+Here's the first question we want to answer from this dataset: do cars with big engines consume more or less fuel than cars with small engines? We can use the variables `displ` (engine size in liters) and `hwy` (fuel efficiency on the highway in miles per gallon) to try to address this question.
 
 Let's create our first plot using the following code (just copy and run this code for now):
 
