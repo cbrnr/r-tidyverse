@@ -20,7 +20,7 @@ Of course the first step is to activate the package:
 library(ggplot2)
 ```
 
-Note that you could also use `library(tidyverse)` instead to activate all core Tidyverse packages, including ggplot2.
+Note that you could also use `library(tidyverse)` to activate all core Tidyverse packages, including ggplot2.
 
 ## Basic usage
 The ggplot2 package contains an example data frame called `mpg`. It is a good idea to read its documentation (`?mpg`) before moving on to the next step. Let's take a look at the data:
@@ -42,7 +42,7 @@ This scatterplot shows a clear negative relationship, meaning that larger engine
 
 All ggplot2 plots start with calling the `ggplot()` function, to which we pass a data frame that contains the data to be plotted (using the `data` argument). This function call on its own just produces an empty plot, because we haven't specified any details about our plot yet.
 
-To add something interesting to the plot, we literally add another layer. In this example, the new layer should contain points, which we can create with the `geom_point()` function. The ggplot2 package contains many geom functions that enable us to create many different kinds of plots. They all have a `mapping` argument, which receives a mapping of how specific columns in the data frame should be represented &ndash; note that this mapping needs to be wrapped inside an `aes()` function. In our example, we map the `displ` column to the `x` axis and the `hwy` column to the `y` axis, resulting in a scatterplot.
+To add something interesting to the plot, we literally add another layer. In this example, the new layer should contain points, which we can create with the `geom_point()` function. The ggplot2 package contains many geom functions that enable us to create many different kinds of plots. They all have a `mapping` argument, which specifies how columns in the data frame should be represented &ndash; note that this mapping needs to be wrapped inside an `aes()` function. In our example, we map the `displ` column to the `x` axis and the `hwy` column to the `y` axis, resulting in a scatterplot.
 
 We can use the code from this example as a template for ggplot2 plots. It looks as follows:
 
@@ -85,12 +85,12 @@ ggplot(data=mpg) +
 See https://r4ds.had.co.nz/data-visualisation.html#exercises-1.
 
 ## Facets
-Facets can be used to split a plot into multiple subplots, each of which shows only a subset of the original data. There are two functions that create facets based on variables (columns) in the data:
+Facets can be used to split a plot into multiple subplots, each of which shows a subset of the original data. There are two functions that create facets based on variables (columns) in the data:
 
 - `facet_wrap()` facets by one variable; use `~ <VARIABLE>` as its first argument.
 - `facet_grid()` facets by two variables; use `<VARIABLE_ROWS> ~ <VARIABLE_COLS>` as its first argument.
 
-It's very easy to add facetting to an existing plot by adding this function (as if it was a new layer). Here are two examples demonstrating this:
+It's very easy to add facetting to an existing plot by adding this function as if it was a new layer. Here are two examples demonstrating this:
 
 ```{r}
 ggplot(data=mpg) +
@@ -105,7 +105,7 @@ ggplot(data=mpg) +
 See https://r4ds.had.co.nz/data-visualisation.html#exercises-2.
 
 ## Composing plots
-Facets create subplots based on subsets of the data. If instead you want to combine multiple *independent* plots, I recommend the [patchwork](https://patchwork.data-imaginist.com/) package. Using operators such as `+`, `|`, and `/`, it is intuitive to create custom arrangements of existing `ggplot` plots (which we need to store in objects for easier access), for example:
+Facets create subplots based on subsets of the data. If instead you want to combine multiple *independent* plots, I recommend the [patchwork](https://patchwork.data-imaginist.com/) package. Using operators such as `+`, `|`, and `/`, it is intuitive to create custom arrangements of existing `ggplot` plots (which we store in objects for easier access), for example:
 
 ```{r}
 library(patchwork)
@@ -143,7 +143,7 @@ p2 <- ggplot(data=mpg) +
 p1 | p2
 ```
 
-Note that we can use multiple geoms in a plot by adding each as a new layer:
+Note that we can use multiple geoms in a plot by adding each one as a new layer:
 
 ```{r message=FALSE}
 ggplot(data=mpg) +
@@ -151,7 +151,7 @@ ggplot(data=mpg) +
     geom_smooth(mapping=aes(x=displ, y=hwy))
 ```
 
-Because both geoms use the same `mapping` arguments, we could also specify a global `mapping` inside the `ggplot()` function call. All geoms will inherit this global mapping, and the resulting figure is identical to the previous one.
+Because both geoms use the same `mapping` arguments, we could also specify a *global* `mapping` inside the `ggplot()` function call. All geoms will inherit this global mapping, and the resulting figure is identical to the previous one.
 
 ```{r eval=FALSE}
 ggplot(data=mpg, mapping=aes(x=displ, y=hwy)) +
@@ -219,7 +219,7 @@ ggplot(data=mpg) +
 See https://r4ds.had.co.nz/data-visualisation.html#exercises-4.
 
 ## Position adjustments
-Finally, geoms have a `position` argument, which influences how charts are visualized when certain grouping aesthetics are used. Consider the following bar chart:
+Geoms have a `position` argument, which influences how charts are visualized when certain grouping aesthetics are used. Consider the following bar chart:
 
 ```{r}
 ggplot(data=mpg) +
@@ -250,3 +250,7 @@ ggplot(data=mpg, mapping=aes(x=class, y=hwy)) +
 ```
 
 With these basic set of ggplot2 functions you can create almost any kind of data visualization.
+
+---
+[![](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
+© 2021, Clemens Brunner
