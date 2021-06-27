@@ -21,10 +21,10 @@ library(dplyr)
 library(nycflights13)
 ```
 
-After activating `dplyr`, a message informs us that several functions from base R have been masked, namely `filter()`, `lag()`, `intersect()`, `setdiff()`, `setequal()`, and `union()`. This means that calling `filter()` after `dplyr` has been loaded doesn't refer to the base R function from the `stats` package anymore. If you still want to use that function, you need to use its full name `stats::filter()`.
+After activating `dplyr`, a message informs us that several functions from base R have been masked, namely `filter()`, `lag()`, `intersect()`, `setdiff()`, `setequal()`, and `union()`. This means that calling `filter()` after `dplyr` has been loaded does not refer to the base R function from the `stats` package anymore. If you still want to use that function, you need to use its full name `stats::filter()`.
 
 ### The nycflights13 package
-The `nycflights13` package contains five datasets on all 336,776 flights that departed New York City in 2013. We will be using the `flights` data frame in this chapter. Before we start, take a look at the documentation `?flights` to find out what each column (variable) represents.
+The `nycflights13` package contains five datasets on all 336,776 flights that departed from New York City in 2013. We will only be using the `flights` data frame in this chapter. Before we start, take a look at the documentation (`?flights`) to find out what each column (variable) represents.
 
 ```{r}
 flights
@@ -33,16 +33,16 @@ flights
 Take note of the different column data types: `<int>` and `<dbl>` are numeric data types that encode integers and doubles (real numbers), respectively. There are also several character columns (`<chr>`) and one column containing a date and a time (`<dttm>`).
 
 ## Basic verbs
-The dplyr package offers six functions that form the verbs of a data manipulation language. With these six functions, we can solve almost any data manipulation problem. In particular, these six functions perform the following tasks:
+The dplyr package offers six functions that form the verbs of a data manipulation language. With these six functions, we can solve almost any data manipulation problem. In particular, the functions perform the following tasks:
 
 - `filter()` selects observations (rows) by certain values.
 - `arrange()` arranges rows in a different order.
 - `select()` picks specific variables (columns).
 - `mutate()` creates new variables based on existing columns.
 - `summarize()` aggregates many data points to a single value.
-- `group_by()` changes the operations to work on grouped data subsets instead of the entire dataset.
+- `group_by()` changes subsequent operations to work on grouped subsets instead of the entire dataset.
 
-We will discuss each function using example operations on the `nycflights::flights` dataset. All functions share some common consistent behavior, because they take a data frame as their first argument and always return a new data frame as their result.
+We will discuss each function using example operations on the `nycflights::flights` dataset. All functions share some common consistent behavior, because they take a data frame as their first argument and always return a new data frame as their result. Therefore, dplyr functions *never* change the original data frame.
 
 ## Filter rows
 We can filter rows in a data frame based on their values in specific columns with `filter()`. As mentioned previously, the first argument is the data frame. Additional arguments specify how rows should be filtered. For example, we could filter our data to get all flights that departed on January 1st:
@@ -51,9 +51,9 @@ We can filter rows in a data frame based on their values in specific columns wit
 filter(flights, month == 1, day == 1)
 ```
 
-The result is a new data frame consisting of 842 rows, which represent all flights on that date. Notice that we can specify column names directly without having to prepend `flights$`, because `filter()` is smart enough to know that we are referring to column names inside the `flights` data frame.
+The result is a new data frame consisting of 842 rows with flights on that date. Notice that we can specify column names directly without having to prepend `flights$`, because `filter()` is smart enough to know that we are referring to column names inside the `flights` data frame.
 
-R knows the usual comparison operators:
+R supports the usual comparison operators:
 
 - `==` (equal)
 - `!=` (not equal)
@@ -62,7 +62,7 @@ R knows the usual comparison operators:
 - `<` (less than)
 - `<=` (less than or equal to)
 
-When we pass two or more comparison arguments, `filter()` combines them with "and" (as in the previous example). If we need other logical operations, we can combine comparisons with these logical operators:
+When we pass two or more comparison arguments, `filter()` combines them with "and" (as in the previous example). In addition, we can combine comparisons with these logical operators:
 
 - `&` (and)
 - `|` (or)
@@ -99,7 +99,7 @@ filter(df, is.na(x) | x > 1)
 See https://r4ds.had.co.nz/transform.html#exercises-8.
 
 ## Arrange rows
-Instead of filtering, it is often useful to arrange rows in a specific order. Similar to `filter()`, the `arrange()` function takes a data frame as its first argument, and one or more additional arguments specify how sorting should be performed. Here's how to sort the data by scheduled departure time as well as year, month, and day:
+It is often useful to arrange rows in a specific order. Similar to `filter()`, the `arrange()` function takes a data frame as its first argument. One or more additional arguments specify how sorting should be performed. Here's how to sort the data by scheduled departure time as well as year, month, and day:
 
 ```{r}
 arrange(flights, year, month, day, sched_dep_time)
@@ -117,7 +117,7 @@ Note that missing values will *always* be sorted at the end.
 See https://r4ds.had.co.nz/transform.html#exercises-9.
 
 ## Select variables
-Often, only a subset of columns in the original data is needed for a particular analysis task. The `select()` function picks only those columns you specify as arguments. Note that ranges can be specified with the `:` operator, and negative values indicate the complement of a specific selection.
+Often, only a subset of columns in the original data is needed for a particular analysis. The `select()` function picks only those columns you specify as arguments. Note that ranges can be specified with the `:` operator, and negative values indicate the complement of a specific selection.
 
 ```{r eval=FALSE}
 select(flights, year, month, day)  # columns year, month, and day
@@ -130,7 +130,7 @@ The following functions are very useful in combination with `select()`:
 - `starts_with("abc")` finds names that start with "abc".
 - `ends_with("xyz")` finds names that end with "xyz".
 - `contains("ijk")` finds names that contain "ijk".
-- `matches("(.)\\1")` finds names that match the regular expression (regex) `(.)\\1` (repeated characters in this particular regex). Regular expressions are a powerful tool for matching almost any kind of pattern, but we do not have time to cover them in this workshop.
+- `matches("(.)\\1")` finds names that match the regular expression `(.)\\1` (repeated characters in this particular example). Regular expressions are a powerful tool for matching almost any kind of pattern, but we do not have time to cover them in this workshop.
 - `num_range("x", 1:3)` finds names `x1`, `x2`, and `x3`.
 
 Here are two examples with the `flights` dataset:
@@ -163,7 +163,7 @@ The `mutate()` function adds new columns based on values from existing columns. 
 mutate(df, gain=arr_delay - dep_delay, hours=air_time / 60, speed=distance / hours)
 ```
 
-Note that we can even refer to columns that we have only just created (the `hours` column in the previous example is immediately used in creating the `speed` column).
+Note that we can even refer to columns that we have only just created (the `hours` column in the previous example is immediately used for creating the `speed` column).
 
 Whereas `mutate()` always keeps all columns, `transmute()` keeps only the new ones.
 
@@ -196,7 +196,7 @@ Seems like November 2013 was a good time to fly. One other thing to notice in th
 ### The pipe operator
 One of the key properties of Tidyverse functions is their support for the pipe operator `%>%`, which is defined in the `magrittr` package. However, we rarely need to activate this package explicitly, because `dplyr` takes care of that under the hood.
 
-The idea behind piping is simple: instead of having to store an intermediate value in a variable, the pipe operator forwards it as the first argument to the next function. This means that instead of writing `f(x)`, we can express the same command as `x %>% f()`. For example, `mean(x)` could also be written as `x %>% mean()`. If we wanted to feed the result of `f(x)` into another function `g()`, instead of writing `g(f(x))` we could use a pipe `x %>% f() %>% g()`. That way, computations that depend on previous calculation can be written in a very intuitive way.
+The idea behind piping is simple: instead of having to store an intermediate value in a variable, the pipe operator forwards it as the first argument to the next function. This means that instead of writing `f(x)`, we can express the same command as `x %>% f()`. For example, `mean(x)` could also be written as `x %>% mean()`. If we wanted to feed the result of `f(x)` into another function `g()`, instead of writing `g(f(x))` we could use a pipe `x %>% f() %>% g()`. That way, computations that depend on previous calculations can be written in a very intuitive way.
 
 You might be wondering why this syntactic sugar is so popular in the Tidyverse (after all, it doesn't add any new functionality). One of the main reasons is that it allows us to write code that corresponds to the flow of operations. Consider the previous example `g(f(x))`, where we take `x`, compute `f()`, and feed its result into `g()`. It is much easier to see what's going on when we write this expression as `x %>% f() %>% g()`.
 
@@ -221,7 +221,7 @@ flights %>%
     summarize(n=n(), na=sum(is.na(dep_delay)), a=sum(!is.na(dep_delay)))
 ```
 
-Let's take a look at the average arrival delay of each individual airplane (as identified by its unique tail number). First, we drop all rows where either departure delay or arrival delay values are missing. Then we group by `tailnum` and summarize these groups by computing the mean arrival delay. Finally, because the result of this pipeline is a data frame, we can directly pipe that to `ggplot()` to create a visualization of the average delay distribution.
+Let's take a look at the average arrival delay of each individual airplane (as identified by its unique tail number). First, we drop all rows where either departure delay or arrival delay values are missing. Then we group by `tailnum` and summarize these groups by computing the mean arrival delay. Finally, because the result of this pipeline is a data frame, we can directly pipe it to `ggplot()` to create a visualization of the average delay distribution.
 
 ```{r}
 flights %>% 
@@ -232,7 +232,7 @@ flights %>%
     geom_histogram(bins=100)
 ```
 
-This plot shows that most airplanes are delayed by only a few minutes, but there are some airplanes with an average arrival delay of around five hours! In this context, it would be interesting to know the number of data points used for each average &ndash; it is likely that the airplanes with extremely high average delays are really based on only a few flights. We can use the `n()` function to find out and create a scatterplot of average delay versus number of data points for each delay:
+This plot shows that most airplanes are delayed by only a few minutes, but there are some airplanes with an average arrival delay of around five hours! In this context, it would be interesting to know the number of data points used for each average &ndash; it is likely that airplanes with extremely high average delays are really based on only a few flights. We can use the `n()` function to find out and create a scatterplot of average delay versus number of data points for each delay:
 
 ```{r}
 flights %>% 
@@ -268,11 +268,11 @@ flights %>%
 ### Other summary functions
 In addition to `n()`, there are many more useful summary functions, including:
 
-- Measures of location: `mean()` and `median()`.
-- Measures of spread: `sd()`, `IQR()`, and `mad()`.
-- Measures of rank: `min()`, `max()`, `quantile()`.
-- Measures of position: `first()`, `last()`, `nth()`.
-- Counts: `n()`, `n_distinct()`, `count()`.
+- Measures of location: `mean()` and `median()`
+- Measures of spread: `sd()`, `IQR()`, and `mad()`
+- Measures of rank: `min()`, `max()`, and `quantile()`
+- Measures of position: `first()`, `last()`, and `nth()`
+- Counts: `n()`, `n_distinct()`, and `count()`
 
 Let's go through some examples demonstrating these summary functions. First, we compute mean and median arrival delays for each airplane:
 
@@ -311,7 +311,7 @@ flights %>%
     summarize(first=first(dep_time), last=last(dep_time))
 ```
 
-Which destinations have the hightest number of carriers?
+Which destinations have the highest number of carriers?
 
 ```{r message=FALSE}
 flights %>% 
@@ -343,3 +343,7 @@ Sometimes it is necessary to remove grouping and return to the full dataset. Thi
 
 ### Exercises
 See https://r4ds.had.co.nz/transform.html#exercises-12.
+
+---
+[![](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
+© 2021, Clemens Brunner
