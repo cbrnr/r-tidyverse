@@ -3,3 +3,4 @@
 *.tex
 *.html
 .Rproj.user
+rsconnect/
