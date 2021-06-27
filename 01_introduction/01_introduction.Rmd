@@ -10,7 +10,7 @@ knitr::opts_chunk$set(comment=NA, fig.align="center")
 ```
 
 ## Tidyverse
-The [Tidyverse](https://www.tidyverse.org/) is a collection of R packages that are designed to work well together. Their fundamental assumption is that data is represented in a so-called "tidy" format, which basically means that it fits into a table where a row corresponds to an observation and a column corresponds to a variable (more details are available in [this article](https://www.jstatsoft.org/article/view/v059i10)).
+The [Tidyverse](https://www.tidyverse.org/) is a collection of R packages that are designed to work well together. Their fundamental assumption is that data is represented in a so-called "tidy" format, which basically means that it fits into a table where a row corresponds to an observation and a column corresponds to a variable (more details are available in the "Tidying data" chapter in this workshop and [this article](https://www.jstatsoft.org/article/view/v059i10)).
 
 Here's what a typical data science workflow looks like:
 
@@ -18,14 +18,14 @@ Here's what a typical data science workflow looks like:
 knitr::include_graphics("workflow.png")
 ```
 
-The Tidyverse offers packages that cover all aspects of this workflow. In this course, we will focus on data wrangling (the green box). In addition, we will also briefly discuss importing and visualizing data. Modeling data and communicating results are outside the scope of this workshop.
+The Tidyverse offers packages that cover all aspects of this workflow. In this course, we will focus on data wrangling (the green box). In addition, we will also discuss importing and visualizing data. Modeling data and communicating results are outside the scope of this workshop.
 
 ## Prerequisites
 To get started with the Tidyverse, we need to install both [R](https://cloud.r-project.org/) and [RStudio](https://www.rstudio.com/products/rstudio/download/). Although RStudio is technically not required, I strongly recommend it because it makes working with R much more pleasant.
 
 Once you have these programs on your computer, start RStudio and install the `tidyverse` package, which is basically a meta-package consisting of the most important packages from the Tidyverse. We will also need the `nycflights13` and `palmerpenguins` packages, because they contain nice datasets that we will explore.
 
-We will now go through some basic R commands and workflows. Ideally, you should already be familiar with most of these topics. If not, this hopefully serves as a quick refresher. Note that we show R code in gray boxes and output/results in white boxes throughout the document, for example:
+We will now go through some basic R commands and workflows. Ideally, you should already be familiar with most of these topics. If not, this hopefully serves as a quick tour and should get you up to speed. Note that we show R code in gray boxes and output/results in white boxes throughout the document, for example:
 
 ```{r}
 mean(c(1, 2, 3))
@@ -41,7 +41,7 @@ knitr::include_graphics("https://github.com/hadley/r4ds/blob/master/cover.png?ra
 
 ## R basics
 ### Packages
-A package contains additional functions that extend the capabilities of R. We install a package with the `install.packages()` function. In this workshop, we are going to use the `tidyverse`, `nycflights13`, and `palmerpenguins` packages. To install them, run the following commands in the R console (note that package names must be surrounded by single or double quotes):
+A package contains additional functions and/or datasets that extend the capabilities of R. We install a package with the `install.packages()` function. In this workshop, we are going to use the `tidyverse`, `nycflights13`, and `palmerpenguins` packages. To install them, run the following commands in the R console (note that package names must be surrounded by single or double quotes):
 
 ```{r eval=FALSE}
 install.packages("tidyverse")
@@ -90,22 +90,22 @@ A more convenient way is to enclose the assignment in parentheses, which will bo
 (x <- 1:10)
 ```
 
-Whenever R outputs a vector, it automatically prepends the index of the first element in a line in square brackets. We only saw `[1]` in the previous outputs, because the values fitted into one line. If you print a longer vector, each line will show the position of its first element:
+Whenever R prints a vector, it automatically prepends the index of the first element to each line in square brackets. We only saw `[1]` in the previous outputs, because the values fitted into one line. If you print a longer vector, each line will show the index of its first element:
 
 ```{r}
 (y <- 1:100)
 ```
 
-The console is nice for trying out commands and playing around with code (until it runs without errors). However, if we want to store a sequence of R commands for later use, we can put them into so-called R scripts. An R script is a plain-text file (ending in `.R`) containing R commands, usually one command per line. RStudio includes an editor (top left pane in the default layout), which can be used to write, edit, and run (parts of) a script.
+The console is nice for trying out commands, fixing errors, and playing around with code. However, if we want to store a sequence of R commands for later use, we can put them into so-called R scripts. An R script is a plain-text file (ending in `.R`) containing R commands, usually one command per line. RStudio includes an editor (top left pane in the default layout), which can be used to write, edit, and run (parts of) a script.
 
-In practise, a data analysis project stored as an R script can be run over and over again. This means if another person wants to reproduce your analysis, all you need to do is share your script and data files. The person then runs your entire script, for example by clicking on the "Source" icon, which fully reproduces the entire analysis and all results.
+Importantly, a data analysis project stored as an R script can be run over and over again. This means if another person wants to reproduce your analysis, all you need to do is share your script and data files. The person then runs your entire script, for example by clicking on the "Source" icon, which fully reproduces the entire analysis and all results.
 
 ### RStudio keyboard shortcuts
 RStudio includes many useful keyboard shortcuts. It really pays off to remember some of them, because your workflow will become faster and more efficient. An overview of all keyboard shortcuts is available in the "Help &ndash; Keyboard Shortcuts Help" menu item.
 
-Here are four important shortcuts that everyone should use:
+Here are four important shortcuts that I think everyone should use:
 
-- The ↑/↓ arrow keys access the command history. You can edit any command you pull up before running it again.
+- The ↑/↓ arrow keys access the command history. You can also edit any command before running it again.
 - If you are searching for a previously entered command starting with specific characters, enter the characters in the console and press ⌘&nbsp;↑ on macOS or Ctrl&nbsp;↑ on Windows and Linux.
 - The shortcut for the assignment operator `<-` is ⌥&nbsp;&ndash; (macOS) or Alt&nbsp;&ndash; (Windows and Linux).
 - Hitting ⌘&nbsp;⏎ (macOS) or Ctrl&nbsp;⏎ (Windows and Linux) in the editor runs the command under the cursor in the console.
@@ -124,7 +124,7 @@ class(y)
 length(y)
 c("Hello", "world!")  # character
 c(TRUE, FALSE)  # logical
-y > 4  # a comparison creates a logical result vector
+y > 4  # a comparison evalutates to a logical vector
 factor(c("A", "A", "B", "A", "C", "C", "A", "B"))  # factor with three levels
 as.Date(c("17.3.2020", "22.5.2020", "3.3.2021"), format="%d.%m.%Y")  # datetime
 ```
@@ -167,7 +167,7 @@ Here are some examples for function calls:
 ```{r}
 c(1, 2, 3)  # 3 arguments
 class("A")  # 1 argument
-length(c(4, 5, 6))  # nested function calls
+length(c(4, 5, 6))  # two (nested) function calls
 ```
 
 The last example shows two nested function calls. First, we call the `c()` function with three arguments, which we use as an argument in the `length()` function call. R tries to reduce all expressions to a value, so it works its way from the innermost layer to the outermost one. Therefore, a nested function call is really two function calls in the following order:
@@ -200,7 +200,7 @@ Let's compute the mean of some numbers involving one missing value:
 mean(x)
 ```
 
-The mean is also unknown, because we cannot compute it because of the missing value. However, almost all aggregation functions support the `na.rm` argument, which by default (`FALSE`) does *not* remove missing values. If we set `na.rm=TRUE`, all missing values are removed before the actual function value is computed:
+The mean is also unknown, because we cannot compute it because of the missing value. However, almost all aggregation functions support the `na.rm` argument, which by default (`FALSE`) does *not* remove missing values. If we set `na.rm=TRUE`, all missing values are removed before the actual value is computed:
 
 ```{r}
 mean(x, na.rm=TRUE)
@@ -217,8 +217,12 @@ is.na(x)
 You can view the documentation for any object by prepending a `?` to the object name. For example, `?length` shows the help page for the `length` function. You can also press F1 to display help for the object at the current cursor location.
 
 ## Exercices
-1. Install the `tidyverse`, `nycflights13`, and `palmerpenguins` packages. After that, check if you have the packages `readr`, `dplyr`, `ggplot2`, and `tidyr` installed (you should).
+1. Install the `tidyverse`, `nycflights13`, and `palmerpenguins` packages. After that, check if you have the packages `readr`, `dplyr`, `ggplot2`, and `tidyr` installed.
 2. What is your current working directory? Create a new directory called `tidyverse-workshop` in your home directory (use Windows Explorer, macOS Finder or the "Files" pane in RStudio to navigate and create the directory). Then set the working directory to this folder. Check again if the current working directory now points to the correct location.
-3. Compute the areas of circles with radiuses 5, 7, 19, and $\pi^{-\frac{1}{2}}$. Put all radiuses into a vector `r` and compute the results with one command!
-4. Create a vector of 100 random numbers drawn from a standard normal distribution using the function `rnorm()`. Then extract all positive numbers from this random vector &ndash; how many elements are positive?
+3. Compute the areas of circles with radiuses 5, 7, 19, and $\pi^{-\frac{1}{2}}$. Put all radiuses into a vector `r` and compute the areas with one command!
+4. Create a vector with 100 random numbers drawn from a standard normal distribution using the function `rnorm()`. Then extract all positive numbers from this random vector &ndash; how many elements are positive?
 5. How many rows and columns does the built-in `mtcars` data frame have? What are the column data types? What does the `drat` column mean?
+
+---
+[![](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
+© 2021, Clemens Brunner
