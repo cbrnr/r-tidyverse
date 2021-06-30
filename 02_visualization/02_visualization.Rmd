@@ -249,7 +249,8 @@ ggplot(data=mpg, mapping=aes(x=class, y=hwy)) +
     coord_flip()
 ```
 
-With these basic set of ggplot2 functions you can create almost any kind of data visualization.
+## Conclusion
+With this basic set of ggplot2 building blocks you can create almost any kind of data visualization. In addition to the "Export" button in the "Plots" pane, you can use `ggsave()` to save a plot to a file.
 
 ---
 [![](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
