@@ -146,5 +146,5 @@ https://www.bmi.gv.at/412/Nationalratswahlen/Nationalratswahl_2019/files/endgult
 http://app.luis.steiermark.at/luft2/suche.php?station1=172&station2=&komponente1=114&station3=&station4=&komponente2=&mittelwert=1
 
 ### Individual household electric power consumption
-http://archive.ics.uci.edu/ml/datasets/Individual+household+electric+power+consumption
+[Description](http://archive.ics.uci.edu/ml/datasets/Individual+household+electric+power+consumption)
 http://archive.ics.uci.edu/ml/machine-learning-databases/00235/household_power_consumption.zip
