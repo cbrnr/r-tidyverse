@@ -135,20 +135,6 @@ The resulting data frame is identical to the previous example where we used the 
 
 ## Writing to a file
 
-## Example datasets
-### COVID19 in Austria
-https://covid19-dashboard.ages.at/data/CovidFaelle_Timeline.csv
-
-### Austrian legislative election 2019
-https://www.bmi.gv.at/412/Nationalratswahlen/Nationalratswahl_2019/files/endgultiges_Gesamtergebnis_NRW19_16102019.xlsx
-
-### Air quality in Graz (PM10)
-http://app.luis.steiermark.at/luft2/suche.php?station1=172&station2=&komponente1=114&station3=&station4=&komponente2=&mittelwert=1
-
-### Individual household electric power consumption
-[Description](http://archive.ics.uci.edu/ml/datasets/Individual+household+electric+power+consumption)
-http://archive.ics.uci.edu/ml/machine-learning-databases/00235/household_power_consumption.zip
-
 ---
 [![](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
 © 2021, Clemens Brunner
