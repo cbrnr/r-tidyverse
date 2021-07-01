@@ -93,7 +93,7 @@ tidy4a <- table4a %>%
 tidy4a
 ```
 
-Note that because these two columns contain names that would be a syntax error (names must not start with a digit), we have to enclose them with backticks.
+Note that because these two columns contain names that would be a syntax error (names must not start with a digit), we have to enclose them with backticks. Furthermore, the type of the `year` column is character, because this is the default behavior for columns created with the `names_to` argument. If we wanted an integer column, we could use the `names_transform` argument.
 
 The resulting data frame is now tidy. We can perform the same pivoting for `table4b` containing data on the `population` variable:
 
@@ -120,3 +120,14 @@ Here's an example of a data frame with multiple rows per observation:
 table2
 ```
 
+To separate rows into columns, we pass two arguments to `pivot_wider()`, namely the column containing the names of the variables and the column containing the values:
+
+```{r}
+table2 %>% 
+    pivot_wider(names_from=type, values_from=count)
+```
+
+### Exercises
+See https://r4ds.had.co.nz/tidy-data.html#exercises-24.
+
+## Separating and uniting
