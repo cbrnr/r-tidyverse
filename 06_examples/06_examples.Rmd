@@ -21,7 +21,38 @@ http://app.luis.steiermark.at/luft2/suche.php?station1=172&station2=&komponente1
 
 ### Individual household electric power consumption
 [Description](http://archive.ics.uci.edu/ml/datasets/Individual+household+electric+power+consumption)
+
 http://archive.ics.uci.edu/ml/machine-learning-databases/00235/household_power_consumption.zip
+
+### CO2 concentration
+[Description](https://scrippsco2.ucsd.edu/data/atmospheric_co2/primary_mlo_co2_record.html)
+
+https://scrippsco2.ucsd.edu/assets/data/atmospheric/stations/in_situ_co2/monthly/monthly_in_situ_co2_mlo.csv
+
+```{r message=FALSE, warning=FALSE}
+library(readr)
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+
+co2 <- read_csv("monthly_in_situ_co2_mlo.csv",
+                col_names=FALSE,
+                comment="\"",
+                trim_ws=TRUE,
+                skip=57,
+                col_types=cols(X1=col_integer(), X2=col_integer(), .default=col_double()),
+                col_select=c(year=X1, month=X2, co2=X5, co2_adj=X6, fit=X7, fit_adj=X8, co2f=X9, co2f_adj=X10))
+
+co2 |>
+    mutate(across(everything(), ~ replace(., . < 0, NA))) |>
+    mutate(date=make_date(year, month)) |>
+    select(date, co2:co2f_adj) |>
+    ggplot(mapping=aes(x=date, y=co2)) +
+    geom_line() +
+    geom_point(size=0.5) +
+    theme_minimal()
+```
+
 
 ---
 [![](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
