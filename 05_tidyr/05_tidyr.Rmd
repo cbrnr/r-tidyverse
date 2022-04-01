@@ -134,4 +134,4 @@ See https://r4ds.had.co.nz/tidy-data.html#exercises-24.
 
 ---
 [![](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
-© 2021, Clemens Brunner
+© 2022, [Clemens Brunner](https://cbrnr.github.io/)

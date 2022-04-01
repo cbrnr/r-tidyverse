@@ -137,4 +137,4 @@ The resulting data frame is identical to the previous example where we used the 
 
 ---
 [![](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
-© 2021, Clemens Brunner
+© 2022, [Clemens Brunner](https://cbrnr.github.io/)

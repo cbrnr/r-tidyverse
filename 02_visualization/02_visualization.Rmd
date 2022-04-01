@@ -254,4 +254,4 @@ With this basic set of ggplot2 building blocks you can create almost any kind of
 
 ---
 [![](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
-© 2021, Clemens Brunner
+© 2022, [Clemens Brunner](https://cbrnr.github.io/)
