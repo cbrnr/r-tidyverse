@@ -42,7 +42,7 @@ This scatterplot shows a clear negative relationship, meaning that larger engine
 
 All ggplot2 plots start with calling the `ggplot()` function, to which we pass a data frame that contains the data to be plotted (using the `data` argument). This function call on its own just produces an empty plot, because we haven't specified any details about our plot yet.
 
-To add something interesting to the plot, we literally add another layer. In this example, the new layer should contain points, which we can create with the `geom_point()` function. The ggplot2 package contains many geom functions that enable us to create many different kinds of plots. They all have a `mapping` argument, which specifies how columns in the data frame should be represented &ndash; note that this mapping needs to be wrapped inside an `aes()` function. In our example, we map the `displ` column to the `x` axis and the `hwy` column to the `y` axis, resulting in a scatterplot.
+To add something interesting to the plot, we literally *add* another layer. In this example, the new layer should contain points, which we can create with the `geom_point()` function. The ggplot2 package contains many geom functions that enable us to create many different kinds of plots. They all have a `mapping` argument, which specifies how columns in the data frame should be represented (note that this mapping needs to be wrapped inside an `aes()` function). In our example, we map the `displ` column to the `x` axis and the `hwy` column to the `y` axis, resulting in a scatterplot.
 
 We can use the code from this example as a template for ggplot2 plots. It looks as follows:
 
@@ -63,16 +63,16 @@ Note that this template is not valid R code! We need to replace all code in angl
 7. Do you see any problem with the scatterplot `displ` versus `hwy` that we produced previously? (Hint: the plot does not show all 234 individual data points contained in the `mpg` data frame.)
 
 ## Aesthetic mappings
-Aesthetics are visual properties in a plot. We have already used the `x` and `y` aesthetics in our previous `mpg` example when we mapped these aesthetics to variables (columns) `displ` and `hwy` in `geom_point(mapping=aes(x=displ, y=hwy))`. We have also noted that we need to wrap aesthetic mappings with the `aes()` function.
+Aesthetics are visual properties of a plot. We have already used the `x` and `y` aesthetics in our previous `mpg` example when we mapped these aesthetics to variables (columns) `displ` and `hwy` in `geom_point(mapping=aes(x=displ, y=hwy))`. We have also noted that we need to wrap aesthetic mappings with the `aes()` function.
 
-There are other aesthetics that we could map data to. For example, we could use the `color` aesthetic to visualize a third variable in the data such as `class`, which contains the type (or class) of each car:
+There are other aesthetics that we could use. For example, we could map to the `color` aesthetic to visualize a third variable in the data such as `class`, which contains the type (or class) of each car:
 
 ```{r}
 ggplot(data=mpg) +
     geom_point(mapping=aes(x=displ, y=hwy, color=class))
 ```
 
-The original scatterplot now conveys additional information on the types of vehicles. Notice that ggplot2 automatically adds a legend. Instead of `color`, we could also use the `shape`, `size` or `alpha` aesthetics (try it out and see what the result looks like). The documentation of the `geom_point()` function lists all supported aesthetics. It is also possible to use multiple aesthetics for the same variable.
+The scatterplot now conveys additional information on the types of vehicles. Notice that ggplot2 automatically adds a legend. Instead of `color`, we could also use the `shape`, `size` or `alpha` aesthetics (try it out and see what the result looks like). The documentation of the `geom_point()` function lists all supported aesthetics. It is also possible to use multiple aesthetics for the same variable.
 
 If you ever want to manually set an aesthetic to a fixed value (not depending on data values), such as plotting all points in blue, you need to specify this outside of `aes()`:
 
@@ -90,7 +90,7 @@ Facets can be used to split a plot into multiple subplots, each of which shows a
 - `facet_wrap()` facets by one variable; use `~ <VARIABLE>` as its first argument.
 - `facet_grid()` facets by two variables; use `<VARIABLE_ROWS> ~ <VARIABLE_COLS>` as its first argument.
 
-It's very easy to add facetting to an existing plot by adding this function as if it was a new layer. Here are two examples demonstrating this:
+It's very easy to add facetting to an existing plot by adding one of these functions as if it was a new layer. Here are two examples:
 
 ```{r}
 ggplot(data=mpg) +
@@ -105,16 +105,16 @@ ggplot(data=mpg) +
 See https://r4ds.had.co.nz/data-visualisation.html#exercises-2.
 
 ## Composing plots
-Facets create subplots based on subsets of the data. If instead you want to combine multiple *independent* plots, I recommend the [patchwork](https://patchwork.data-imaginist.com/) package. Using operators such as `+`, `|`, and `/`, it is intuitive to create custom arrangements of existing `ggplot` plots (which we store in objects for easier access), for example:
+Facets create subplots based on subsets of the data. If instead you want to combine multiple *independent* plots, I recommend the [patchwork](https://patchwork.data-imaginist.com/) package. Using operators such as `+`, `|`, and `/`, it is intuitive to create custom arrangements of existing `ggplot` objects (which we assign to variables for easier access), for example:
 
 ```{r}
 library(patchwork)
 
-p1 <- ggplot(data=mpg) +
+p1 = ggplot(data=mpg) +
     geom_point(mapping=aes(x=hwy, y=cty))
-p2 <- ggplot(data=mtcars) +
+p2 = ggplot(data=mtcars) +
     geom_boxplot(mapping=aes(x=cyl, y=qsec, group=cyl))
-p3 <- ggplot(data=mpg) +
+p3 = ggplot(data=mpg) +
     geom_point(mapping=aes(x=displ, y=hwy))
 
 (p1 | p2) / p3
@@ -124,9 +124,9 @@ p3 <- ggplot(data=mpg) +
 Consider the following two plots:
 
 ```{r message=FALSE, fig.height=3}
-p1 <- ggplot(data=mpg) +
+p1 = ggplot(data=mpg) +
     geom_point(mapping=aes(x=displ, y=hwy))
-p2 <- ggplot(data=mpg) +
+p2 = ggplot(data=mpg) +
     geom_smooth(mapping=aes(x=displ, y=hwy))
 p1 | p2
 ```
@@ -136,14 +136,14 @@ These plots show the same data (`displ` versus `hwy`), but they use different vi
 Every geom function takes a `mapping` argument where you specify which data columns should be mapped to which aesthetics. Note that any given geom supports only aesthetics that make sense (check the documentation to find out). For example, you can set the `shape` of a point, but the `shape` of a line does not make sense (so `geom_line` does not support it). However, you could use the `linetype` aesthetic instead.
 
 ```{r message=FALSE, fig.height=3}
-p1 <- ggplot(data=mpg) +
+p1 = ggplot(data=mpg) +
     geom_point(mapping=aes(x=displ, y=hwy, shape=drv))
-p2 <- ggplot(data=mpg) +
+p2 = ggplot(data=mpg) +
     geom_smooth(mapping=aes(x=displ, y=hwy, linetype=drv))
 p1 | p2
 ```
 
-Note that we can use multiple geoms in a plot by adding each one as a new layer:
+Importantly, we can use multiple geoms in a plot by adding each one as a new layer:
 
 ```{r message=FALSE}
 ggplot(data=mpg) +
@@ -151,7 +151,7 @@ ggplot(data=mpg) +
     geom_smooth(mapping=aes(x=displ, y=hwy))
 ```
 
-Because both geoms use the same `mapping` arguments, we could also specify a *global* `mapping` inside the `ggplot()` function call. All geoms will inherit this global mapping, and the resulting figure is identical to the previous one.
+Because both geoms use the same `mapping` argument, we could also specify a *global* `mapping` inside the `ggplot()` function call. All geoms will inherit this global mapping, and the resulting figure is identical to the previous one.
 
 ```{r eval=FALSE}
 ggplot(data=mpg, mapping=aes(x=displ, y=hwy)) +
@@ -159,7 +159,7 @@ ggplot(data=mpg, mapping=aes(x=displ, y=hwy)) +
     geom_smooth()
 ```
 
-Global and local mappings can be combined; if you don't specify a mapping for a particular geom function, the function will use the global mapping. However, if you do specify a local mapping by passing a `mapping` argument in a specific geom function, it will *extend* the global one:
+Global and local mappings can be combined; if you don't specify a mapping for a particular geom function, the function will use the global mapping. However, if you do specify a local mapping by passing a `mapping` argument in a specific geom function, it will *extend* (not replace) the global one:
 
 ```{r message=FALSE}
 ggplot(data=mpg, mapping=aes(x=displ, y=hwy)) +
@@ -167,7 +167,7 @@ ggplot(data=mpg, mapping=aes(x=displ, y=hwy)) +
     geom_smooth()
 ```
 
-We can also apply this concept of global and local settings to the `data` argument. This is useful if a particular layer is based on a different (sub)set of data.
+We can also apply this concept of global and local settings to the `data` argument. This is useful if a particular layer is based on a different data (sub)set.
 
 ### Exercises
 See https://r4ds.had.co.nz/data-visualisation.html#exercises-3.
@@ -180,35 +180,35 @@ ggplot(data=mpg) +
     geom_bar(mapping=aes(x=class))
 ```
 
-Notice how we only specified a mapping for the `x` aesthetic (the `class` column). However, the *y*-axis shows counts, a variable that is not contained in the data.
+Notice how we only specified a mapping for the `x` aesthetic (the `class` column). However, the *y*-axis shows counts, a variable that is *not* contained in the data.
 
-Although many plots show the raw data (as we saw with scatterplots), other kinds of plots transform the original data to show counts of the binned data (like in the bar chart), summary statistics or predictions from a model fitted to the data. This works automatically, because each geom function is associated with a default statistical transformation. You can check the documentation of a geom to see its default transformation listed as the default argument for the `stat` parameter. For example, `geom_point()` uses `stat="identity"` (no transformation), whereas `geom_bar()` uses `stat="count"`.
+Although many plots show the raw data (as we saw with scatterplots), other kinds of plots *transform* the original data to show counts of the binned data (like in the bar chart), summary statistics, or predictions from a model fitted to the data. This works automatically, because each geom function is associated with a default statistical transformation. You can check the documentation of a geom to see its default transformation listed as the default argument for the `stat` parameter. For example, `geom_point()` uses `stat="identity"` (no transformation), whereas `geom_bar()` uses `stat="count"`.
 
 Sometimes, it is necessary to change the stat of a geom. For example, let's assume that we had the count data directly available in a data frame as follows:
 
 ```{r}
 library(tibble)
 
-mpg_count <- tribble(
-  ~class,   ~count,
-  "2seater",     5,
-  "compact",    47,
-  "midsize",    41,
-  "minivan",    11,
-  "pickup",     33,
-  "subcompact", 35,
-  "suv",        62
+mpg_count = tribble(
+    ~class,   ~count,
+    "2seater",     5,
+    "compact",    47,
+    "midsize",    41,
+    "minivan",    11,
+    "pickup",     33,
+    "subcompact", 35,
+    "suv",        62
 )
 ```
 
-If we want to visualize this as a bar chart, we need to pass `stat="identity"`:
+If we want to visualize this as a bar chart, we need to pass `stat="identity"` to avoid the default `"count"` transformation:
 
 ```{r}
 ggplot(data=mpg_count) +
     geom_bar(mapping=aes(x=class, y=count), stat="identity")
 ```
 
-Finally, since each geom function has a default stat function, and each stat function has a default geom function, we can use these functions interchangeably. For example, `geom_bar` uses `stat_count` and `stat_count` uses `geom_bar` by default. Therefore, we can also produce the bar chart we have encountered previously with the following code:
+Finally, since each geom function has a default stat function, and each stat function has a default geom function, we can use these functions interchangeably. For example, `geom_bar()` uses `stat_count()` and `stat_count()` uses `geom_bar()` by default. Therefore, we can also produce the bar chart we have encountered previously with the following code:
 
 ```{r eval=FALSE}
 ggplot(data=mpg) +
@@ -226,7 +226,7 @@ ggplot(data=mpg) +
     geom_bar(mapping=aes(x=class, fill=drv))
 ```
 
-This is a stacked bar chart, because it uses `position="stack"` by default. If you don't want a stacked bar chart, you can also use `"identity"`, `"dodge"` or `"fill"`:
+This is a stacked bar chart, because it uses `position="stack"` by default. If you don't want a stacked bar chart, you can also use `"identity"`, `"dodge"`, or `"fill"`:
 
 ```{r}
 ggplot(data=mpg) +
@@ -250,7 +250,7 @@ ggplot(data=mpg, mapping=aes(x=class, y=hwy)) +
 ```
 
 ## Conclusion
-With this basic set of ggplot2 building blocks you can create almost any kind of data visualization. In addition to the "Export" button in the "Plots" pane, you can use `ggsave()` to save a plot to a file.
+With this set of ggplot2 building blocks, you can create a basic version of almost any kind of data visualization. In addition to the "Export" button in the "Plots" pane, you can use `ggsave()` to save a plot to a file.
 
 ---
 [![](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
