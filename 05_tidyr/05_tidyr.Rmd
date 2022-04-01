@@ -56,11 +56,11 @@ Here are some examples how easy it is to work with `table1`:
 library(dplyr)
 
 # compute rate per 10000
-table1 %>% 
+table1 |>
     mutate(rate=cases / population * 10000)
 
 # compute cases per year
-table1 %>% 
+table1 |>
     count(year, wt=cases)
 
 # plot changes over time
@@ -72,7 +72,7 @@ ggplot(data=table1, mapping=aes(x=year, y=cases, color=country)) +
 ```
 
 ## Pivoting
-There are two main things to consider if a dataset is not tidy. First, it is important to determine what the variables and observations are. This sounds easier as it might be in practise, so sometimes it is necessary to do a fair amount of research before completing this step. Second, we need to make sure that the rules of tidy data apply. This means that each variable should correspond to one column, and each observation should correspond to one row. If this is not the case, we can pivot the data so that it fulfills these requirements. In most cases, we only need two functions from the *tidyr*  package, namely `pivot_longer()` and `pivot_wider()`.
+There are two main things to consider if a dataset is not tidy. First, it is important to determine what the variables and observations are. This sounds easier as it might be in practice, so sometimes it is necessary to do a fair amount of research before completing this step. Second, we need to make sure that the rules of tidy data apply. This means that each variable should correspond to one column, and each observation should correspond to one row. If this is not the case, we can pivot the data so that it fulfills these requirements. In most cases, we only need two functions from the *tidyr*  package, namely `pivot_longer()` and `pivot_wider()`.
 
 ### Longer
 A variable is often spread across two or more columns. This means that column titles actually contain values of a variable (instead of variable names). For example, `table4a` (and `table4b`) contains two columns named `` `1999` `` and `` `2000` ``:
@@ -88,18 +88,32 @@ These column titles are actually two values of the variable `year`. The values i
 3. A (new) variable name to move the values to (here we choose `cases`).
 
 ```{r}
-tidy4a <- table4a %>% 
+table4a |>
     pivot_longer(c(`1999`, `2000`), names_to="year", values_to="cases")
-tidy4a
 ```
 
-Note that because these two columns contain names that would be a syntax error (names must not start with a digit), we have to enclose them with backticks. Furthermore, the type of the `year` column is character, because this is the default behavior for columns created with the `names_to` argument. If we wanted an integer column, we could use the `names_transform` argument.
+Note that because these two columns contain names that would be a syntax error (names must not start with a digit), we have to enclose them with backticks. Furthermore, the type of the `year` column is character, because this is the default behavior for columns created with the `names_to` argument. If we wanted an integer column, we could use the `names_transform` argument:
+
+```{r}
+tidy4a = table4a |>
+    pivot_longer(
+        c(`1999`, `2000`),
+        names_to="year",
+        values_to="cases",
+        names_transform=list(year=as.integer)
+    )
+```
 
 The resulting data frame is now tidy. We can perform the same pivoting for `table4b` containing data on the `population` variable:
 
 ```{r}
-tidy4b <- table4b %>% 
-    pivot_longer(c(`1999`, `2000`), names_to="year", values_to="population")
+tidy4b = table4b |>
+    pivot_longer(
+        c(`1999`, `2000`),
+        names_to="year",
+        values_to="population",
+        names_transform=list(year=as.integer)
+    )
 tidy4b
 ```
 
@@ -123,7 +137,7 @@ table2
 To separate rows into columns, we pass two arguments to `pivot_wider()`, namely the column containing the names of the variables and the column containing the values:
 
 ```{r}
-table2 %>% 
+table2 |>
     pivot_wider(names_from=type, values_from=count)
 ```
 
@@ -131,6 +145,7 @@ table2 %>%
 See https://r4ds.had.co.nz/tidy-data.html#exercises-24.
 
 ## Separating and uniting
+TODO
 
 ---
 [![](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
