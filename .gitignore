@@ -1,4 +1,3 @@
 .Rhistory
-*.log
-*.tex
+*_files/
 *.html
