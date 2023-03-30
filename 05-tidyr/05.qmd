@@ -1,32 +1,37 @@
 ---
 title: "Tidying data"
-output:
-  html_document
+subtitle: "Data wrangling in R using the Tidyverse"
+author: "Clemens Brunner"
+date: 2023-03-30
+format: html
+highlight-style: github
+title-block-banner: true
+theme:
+  light: flatly
+  dark: darkly
+fig-cap-location: margin
 ---
-
-```{r include=FALSE}
-options(width=110)
-knitr::opts_chunk$set(comment=NA, fig.align="center")
-```
 
 ## Introduction
 
 > Tidy datasets are all alike, but every messy dataset is messy in its own way.
-> 
+>
 >   *&mdash; Hadley Wickham*
 
 The Tidyverse revolves around tidy data. Data can be represented in several ways, but to be tidy it must have the following properties:
 
-1. Each variable corresponds to exactly one column.
-2. Each observation corresponds to exactly one row.
-3. Each value corresponds to exactly one cell.
+1. Each *variable* corresponds to exactly one *column*.
+2. Each *observation* corresponds to exactly one *row*.
+3. Each *value* corresponds to exactly one *cell*.
 
 Since these three rules are related, they can be simplified to two practical rules:
 
 1. Put each dataset in a tibble.
 2. Put each variable in a column.
 
-This is all we need to know for this workshop, but if you are interested in the details make sure to check out [this article](https://www.jstatsoft.org/article/view/v059i10).
+:::{.callout-tip}
+If you are interested in all the details about tidy data, make sure to check out [this article](https://www.jstatsoft.org/article/view/v059i10).
+:::
 
 If a dataset is already tidy, operations using Tidyverse packages are easy and straightforward. If this is not the case, the [tidyr](https://tidyr.tidyverse.org/) package provides useful functions to transform a messy dataset into a tidy one.
 
@@ -48,7 +53,7 @@ All data frames represent exactly the same data, but only `table1` is tidy. Let'
 
 - `table2` contains values of two variables (`cases` and `population`) in its last column; this violates the rule that each variable must have its own column.
 - `table3` combines two variables (`cases` and `population`) in one column (`rate`). In addition, the rate is represented as a character column, which makes it impossible to directly perform numeric calculations.
-- `table4a` and `table4b` are spread across two data frames although they each contain a variable for the same observations.
+- `table4a` and `table4b` are spread across two data frames, although they each contain a variable for the same observations.
 
 Here are some examples how easy it is to work with `table1`:
 
@@ -71,11 +76,15 @@ ggplot(data=table1, mapping=aes(x=year, y=cases, color=country)) +
     geom_point()
 ```
 
+
 ## Pivoting
+
 There are two main things to consider if a dataset is not tidy. First, it is important to determine what the variables and observations are. This sounds easier as it might be in practice, so sometimes it is necessary to do a fair amount of research before completing this step. Second, we need to make sure that the rules of tidy data apply. This means that each variable should correspond to one column, and each observation should correspond to one row. If this is not the case, we can pivot the data so that it fulfills these requirements. In most cases, we only need two functions from the *tidyr*  package, namely `pivot_longer()` and `pivot_wider()`.
 
+
 ### Longer
-A variable is often spread across two or more columns. This means that column titles actually contain values of a variable (instead of variable names). For example, `table4a` (and `table4b`) contains two columns named `` `1999` `` and `` `2000` ``:
+
+A single variable is often spread across two or more columns. This means that column titles contain values of a variable (instead of variable names). For example, `table4a` (and `table4b`) contains two columns named `` `1999` `` and `` `2000` ``:
 
 ```{r}
 table4a
@@ -92,7 +101,7 @@ table4a |>
     pivot_longer(c(`1999`, `2000`), names_to="year", values_to="cases")
 ```
 
-Note that because these two columns contain names that would be a syntax error (names must not start with a digit), we have to enclose them with backticks. Furthermore, the type of the `year` column is character, because this is the default behavior for columns created with the `names_to` argument. If we wanted an integer column, we could use the `names_transform` argument:
+Note that because these two columns contain names that would be a syntax error (names in R must not start with a digit), we have to enclose them with backticks. Furthermore, the type of the `year` column is character, because this is the default behavior for columns created with the `names_to` argument. If we wanted an integer column, we could use the `names_transform` argument:
 
 ```{r}
 tidy4a = table4a |>
@@ -125,7 +134,9 @@ Finally, we would like to combine `tidy4a` and `tidy4b` to a single data frame. 
 left_join(tidy4a, tidy4b)
 ```
 
+
 ### Wider
+
 The opposite operation to `pivot_longer()` is `pivot_wider()`. It is useful in the case where one observation is represented in multiple rows, so our goal is to put the values into separate columns. In general, the resulting data frame is wider because it consists of more columns and/or fewer rows.
 
 Here's an example of a data frame with multiple rows per observation:
@@ -141,12 +152,12 @@ table2 |>
     pivot_wider(names_from=type, values_from=count)
 ```
 
+
 ### Exercises
-See https://r4ds.had.co.nz/tidy-data.html#exercises-24.
+
+See [https://r4ds.had.co.nz/tidy-data.html#exercises-24](https://r4ds.had.co.nz/tidy-data.html#exercises-24).
+
 
 ## Separating and uniting
-TODO
 
----
-[![](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
-© 2022, [Clemens Brunner](https://cbrnr.github.io/)
+TODO
