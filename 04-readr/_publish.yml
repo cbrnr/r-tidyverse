@@ -1,0 +1,4 @@
+- source: 04.qmd
+  quarto-pub:
+    - id: 1db00311-1534-4cc3-9562-42146c5cc3d3
+      url: 'https://quartopub.com/sites/cbrnr/r-tidyverse-04'
