@@ -1,29 +1,39 @@
 ---
 title: "Data wrangling"
-output:
-  html_document
+subtitle: "Data wrangling in R using the Tidyverse"
+author: "Clemens Brunner"
+date: 2023-03-30
+format: html
+highlight-style: github
+title-block-banner: true
+theme:
+  light: flatly
+  dark: darkly
+fig-cap-location: margin
 ---
 
-```{r include=FALSE}
-options(width=110)
-knitr::opts_chunk$set(comment=NA, fig.align="center")
-```
-
 ## Introduction
+
 ### Prerequisites
-In this chapter, we will introduce the [dplyr](https://dplyr.tidyverse.org/) package, another core member of the Tidyverse. Because we still have not discussed importing our own datasets, we will showcase data manipulation with dplyr with the `nycflights13::flights` dataset. We will also apply our knowledge from the previous chapter on ggplot2 by creating various visualizations. 
 
-In this chapter, we will need the following packages:
+In this chapter, we will introduce the [dplyr](https://dplyr.tidyverse.org/) package, another core member of the Tidyverse. Because we still have not discussed importing our own datasets, we will showcase data manipulation with dplyr with the `nycflights13::flights` dataset. We will also apply our knowledge from the previous chapter on ggplot2 by creating various visualizations.
 
-```{r message=FALSE}
+We will need the following packages:
+
+```{r}
+#| message: false
 library(ggplot2)
 library(dplyr)
 library(nycflights13)
 ```
 
+:::{.callout-note}
 After activating `dplyr`, a message informs us that several functions from base R have been masked, namely `filter()`, `lag()`, `intersect()`, `setdiff()`, `setequal()`, and `union()`. This means that calling `filter()` after `dplyr` has been activated does not refer to the base R function from the `stats` package anymore. If you still want to use that function, you need to specify its full name `stats::filter()`.
+:::
+
 
 ### The nycflights13 package
+
 The [nycflights13](https://github.com/tidyverse/nycflights13) package contains five datasets on all 336,776 flights that departed from New York City in 2013. We will only be using the `flights` data frame in this chapter. Before we start, I recommend that you take a look at the documentation (`?flights`) to find out what each column (variable) represents.
 
 ```{r}
@@ -32,7 +42,9 @@ flights
 
 Take note of the different column data types: `<int>` and `<dbl>` are numeric data types that encode integers and doubles (real numbers), respectively. There are also several character columns (`<chr>`) and one column containing a date and a time (`<dttm>`).
 
+
 ## Basic verbs
+
 The dplyr package offers six functions that form the verbs of a powerful data manipulation language. With these six functions, we can solve almost any data manipulation problem. In particular, the functions perform the following tasks:
 
 - `filter()` selects observations (rows) by certain values.
@@ -40,11 +52,13 @@ The dplyr package offers six functions that form the verbs of a powerful data ma
 - `select()` picks specific variables (columns).
 - `mutate()` creates new variables based on existing columns.
 - `summarize()` aggregates multiple data points to a single value.
-- `group_by()` changes subsequent operations to work on grouped subsets instead of the entire dataset.
+- `group_by()` changes subsequent operations to work on grouped subsets.
 
 We will discuss each function using example operations on the `nycflights::flights` dataset. All functions share some common consistent behavior, because they take a data frame as their first argument and always return a new data frame as their result. Therefore, dplyr functions *never* modify the original data frame.
 
+
 ## Filter rows
+
 We can filter rows in a data frame based on their values in specific columns with `filter()`. As mentioned previously, the first argument is the data frame. Additional arguments specify how rows should be filtered. For example, we could filter our data to get all flights that departed on January 1st:
 
 ```{r}
@@ -53,7 +67,7 @@ filter(flights, month == 1, day == 1)
 
 The result is a new data frame consisting of 842 rows with flights on that date. Notice that we can specify column names directly without having to prepend `flights$`, because `filter()` is smart enough to know that we are referring to column names inside the `flights` data frame.
 
-R supports the usual comparison operators:
+We can use the usual comparison operators:
 
 - `==` (equal)
 - `!=` (not equal)
@@ -71,19 +85,19 @@ When we pass two or more comparison arguments, `filter()` combines them with "an
 
 We could rewrite the previous example as follows:
 
-```{r eval=FALSE}
+```r
 filter(flights, month == 1 & day == 1)
 ```
 
 Here's how we could find all flights departing in November or December:
 
-```{r eval=FALSE}
+```r
 filter(flights, month == 11 | month == 12)
 ```
 
 The `%in%` operator is a handy shortcut for chaining several comparisons with "or". The previous example could be rewritten as:
 
-```{r eval=FALSE}
+```r
 filter(flights, month %in% c(11, 12))
 ```
 
@@ -95,10 +109,14 @@ filter(df, x > 1)  # NA values are automatically dropped
 filter(df, is.na(x) | x > 1)
 ```
 
+
 ### Exercises
-See https://r4ds.had.co.nz/transform.html#exercises-8.
+
+See [https://r4ds.had.co.nz/transform.html#exercises-8](https://r4ds.had.co.nz/transform.html#exercises-8).
+
 
 ## Arrange rows
+
 It is often useful to arrange rows in a specific order. Similar to `filter()`, the `arrange()` function takes a data frame as its first argument. One or more additional arguments specify how sorting should be performed. Here's how to sort the data by scheduled departure time as well as year, month, and day:
 
 ```{r}
@@ -111,15 +129,21 @@ By default, `arrange()` uses ascending order, but we can use the `desc()` functi
 arrange(flights, desc(dep_delay))
 ```
 
-Note that missing values will *always* be sorted at the end.
+:::{.callout-note}
+Missing values will *always* be sorted at the end.
+:::
+
 
 ### Exercises
-See https://r4ds.had.co.nz/transform.html#exercises-9.
+
+See [https://r4ds.had.co.nz/transform.html#exercises-9](https://r4ds.had.co.nz/transform.html#exercises-9).
+
 
 ## Select variables
+
 Often, only a subset of columns in the original data is needed for a particular analysis. The `select()` function picks only those columns you specify as arguments. Note that ranges can be specified with the `:` operator, and negative values indicate the complement of a specific selection.
 
-```{r eval=FALSE}
+```r
 select(flights, year, month, day)  # columns year, month, and day
 select(flights, year:day)  # columns year through day
 select(flights, -(year:day))  # all columns except year through day
@@ -149,62 +173,82 @@ rename(flights, tail_num=tailnum)  # rename tailnum column to tail_num
 Finally, the `everything()` function is useful if you want to reorder specific columns (for example moving them to the beginning of the data frame):
 
 ```{r}
-select(flights, time_hour, air_time, everything())  # move time_hour and air_time columns to the beginning
+select(flights, time_hour, air_time, everything())
 ```
 
+
 ### Exercises
-See https://r4ds.had.co.nz/transform.html#exercises-10.
+
+See [https://r4ds.had.co.nz/transform.html#exercises-10](https://r4ds.had.co.nz/transform.html#exercises-10).
+
 
 ## Create new variables
+
 The `mutate()` function adds new columns based on values from existing columns. Because new columns are always added to the end, we will first create a subset of the `flights` data frame with fewer columns to better see the effect of `mutate()`.
 
 ```{r}
 (df = select(flights, year:day, ends_with("delay"), distance, air_time))
-mutate(df, gain=arr_delay - dep_delay, hours=air_time / 60, speed=distance / hours)
+mutate(
+    df,
+    gain=arr_delay - dep_delay,
+    hours=air_time / 60,
+    speed=distance / hours
+)
 ```
 
 Note that we can even refer to columns that we have only just created (the `hours` column in the previous example is immediately used for creating the `speed` column).
 
 Whereas `mutate()` always keeps all columns, `transmute()` keeps only the new ones.
 
+
 ### Exercises
-See https://r4ds.had.co.nz/transform.html#exercises-11.
+
+See [https://r4ds.had.co.nz/transform.html#exercises-11](https://r4ds.had.co.nz/transform.html#exercises-11).
+
 
 ## Summarize grouped data
-Summarizing variables is important in almost any data analysis task. It is most useful on grouped data, but to showcase the `summarize()` function we will start by applying it on the whole (ungrouped) data first:
+
+Summarizing variables is important in almost any data analysis task. It is most useful on grouped data, but to showcase the `summarize()` function, we will start by applying it to the entire dataset:
 
 ```{r}
 summarize(flights, delay=mean(dep_delay, na.rm=TRUE))
 ```
 
-The `group_by` function partitions the dataset into groups. Applying `summarize()` to grouped data will automatically compute the summary for each group. In the following example, we compute the average delay for each day:
+The `group_by()` function partitions the dataset into groups. Applying `summarize()` to grouped data will automatically compute the summary for each group. In the following example, we compute the average delay for each day:
 
-```{r message=FALSE}
+```{r}
+#| message: false
 by_day = group_by(flights, year, month, day)
 summarize(by_day, delay=mean(dep_delay, na.rm=TRUE))
 ```
 
 Or what about the average delay per month?
 
-```{r message=FALSE}
+```{r}
+#| message: false
 by_month = group_by(flights, year, month)
 summarize(by_month, delay=mean(dep_delay, na.rm=TRUE))
 ```
 
 Seems like November 2013 was a good time to fly. One other thing to notice in the previous example is that we needed to create a new variable `by_month` that contained the grouped data. However, we actually never really needed this variable except as input to the `summarize()` function. In the next section, we will introduce a method that allows us to get rid of such temporary (unneeded) variables: the pipe operator.
 
+
 ### The pipe operator
+
 One of the key properties of Tidyverse functions is their support for the pipe operator `%>%`, which is defined in the [magrittr](https://magrittr.tidyverse.org/) package. R has gained a native pipe operator as of version 4.1. It is written as `|>` and we can use it instead of `%>%` in almost all cases. We will use the native pipe operator `|>` throughout the course material, but if you explicitly want your code to run on R versions prior to 4.1, you need to use the magrittr pipe `%>%`.
 
-In RStudio, you can use the keyboard shortcut <kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>m</kbd> (macOS) or <kbd>Ctrl</kbd>+<kbd>⇧</kbd>+<kbd>m</kbd> (Windows and Linux) to insert the pipe operator (you can select between the native and magrittr variants in the "Code" section of RStudio's preferences).
+:::{.callout-tip}
+In RStudio, you can use the keyboard shortcut <kbd>⌘</kbd><kbd>⇧</kbd><kbd>m</kbd> (macOS) or <kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>m</kbd> (Windows and Linux) to insert the pipe operator (you can select between the native and magrittr variants in the "Code" section of RStudio's preferences).
+:::
 
-The idea behind piping is simple: instead of having to store an intermediate value in a variable, the pipe operator forwards it as the first argument to the next function. This means that instead of writing `f(x)`, we can express the same command as `x |> f()`. For example, `mean(x)` could also be written as `x |> mean()`. This is not really helpful yet, but if we wanted to feed the result of `f(x)` into another function `g()`, instead of writing `g(f(x))` we could use a pipe `x |> f() |> g()`. That way, computations that depend on previous calculations can be written in a very intuitive way.
+The idea behind piping is simple: instead of having to store an intermediate value in a variable, the pipe operator forwards any value as the first argument to the next function. This means that instead of writing `f(x)`, we can express the same command as `x |> f()`. For example, `mean(x)` could also be written as `x |> mean()`. This is not really helpful yet, but if we wanted to feed the result of `f(x)` into another function `g()`, instead of writing `g(f(x))` we could use a pipe `x |> f() |> g()`. That way, computations that depend on previous calculations can be written in a very intuitive way.
 
 You might be wondering why this syntactic sugar is so popular in the Tidyverse (after all, it doesn't add any new functionality). One of the main reasons is that it allows us to write code that corresponds to the flow of operations. Consider the previous example `g(f(x))`, where we take `x`, compute `f()`, and feed its result into `g()`. It is much easier to see the order of operations when we write this expression as `x |> f() |> g()`.
 
 If this example was too abstract, let's revisit our previous code snippet where we computed average delays grouped by month. Using the pipe operator, we can express the same calculation as follows:
 
-```{r message=FALSE}
+```{r}
+#| message: false
 flights |>
     group_by(year, month) |>
     summarize(delay=mean(dep_delay, na.rm=TRUE))
@@ -212,10 +256,13 @@ flights |>
 
 Notice how it is immediately clear that each function in this pipeline receives the result from the previous computation as its input. In fact, if we read this code from left to right and top to bottom, we automatically know how the data is processed: first, we take the `flights` data, then group it by year and month, and finally summarize it by computing the average delay.
 
+
 ### Counts
+
 R comes with a plethora of useful summary functions. Computing counts in grouped data is always a good idea, because it can provide important first insights. The `n()` function can be used to determine group sizes, but note that missing values are included in the counts. You can use `sum(!is.na(x))` to count the number of non-missing data points in a (grouped) variable `x`:
 
-```{r message=FALSE}
+```{r}
+#| message: false
 flights |>
     group_by(year, month) |>
     summarize(n=n(), na=sum(is.na(dep_delay)), a=sum(!is.na(dep_delay)))
@@ -232,7 +279,7 @@ flights |>
     geom_histogram(bins=100)
 ```
 
-This plot shows that most airplanes are delayed by only a few minutes, but there are some airplanes with an average arrival delay of around five hours! In this context, it would be interesting to know the number of data points used for each average &ndash; it is likely that airplanes with extremely high average delays are really based on only a few flights. We can use the `n()` function to find out and create a scatterplot of average delay versus number of data points for each delay:
+This plot shows that most airplanes are delayed by only a few minutes, but there are some airplanes with an average arrival delay of around five hours! In this context, it would be interesting to know the number of data points used for each average – it is likely that airplanes with extremely high average delays are really based on only a few flights. We can use the `n()` function to find out and create a scatterplot of average delay versus number of data points for each delay:
 
 ```{r}
 flights |>
@@ -265,7 +312,9 @@ flights |>
     geom_point(alpha=0.25)
 ```
 
+
 ### Other summary functions
+
 In addition to `n()`, there are many more useful summary functions, including:
 
 - Measures of location: `mean()` and `median()`
@@ -295,7 +344,8 @@ flights |>
 
 How about finding out the first and last departure times on each day?
 
-```{r message=FALSE}
+```{r}
+#| message: false
 flights |>
     filter(!is.na(dep_delay), !is.na(arr_delay)) |>
     group_by(year, month, day) |>
@@ -304,7 +354,8 @@ flights |>
 
 Since the data is actually sorted by `dep_time`, we can also take the first and last entry in each group to get the earliest and latest departure times:
 
-```{r message=FALSE}
+```{r}
+#| message: false
 flights |>
     filter(!is.na(dep_delay), !is.na(arr_delay)) |>
     group_by(year, month, day) |>
@@ -313,7 +364,8 @@ flights |>
 
 Which destinations have the highest number of carriers?
 
-```{r message=FALSE}
+```{r}
+#| message: false
 flights |>
     filter(!is.na(dep_delay), !is.na(arr_delay)) |>
     group_by(dest) |>
@@ -338,12 +390,12 @@ flights |>
     count(tailnum)
 ```
 
+
 ### Ungrouping
+
 Sometimes it is necessary to remove grouping and return to the full dataset. This can be achieved with the `ungroup()` function.
 
-### Exercises
-See https://r4ds.had.co.nz/transform.html#exercises-12.
 
----
-[![](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
-© 2022, [Clemens Brunner](https://cbrnr.github.io/)
+### Exercises
+
+See [https://r4ds.had.co.nz/transform.html#exercises-12](https://r4ds.had.co.nz/transform.html#exercises-12).
