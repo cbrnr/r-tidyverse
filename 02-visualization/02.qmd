@@ -303,6 +303,22 @@ ggplot(data=mpg, mapping=aes(x=class, y=hwy)) +
 ```
 
 
+## Themes
+
+If you prefer a different look than gray background with white grid lines for your plots, ggplot2 comes with several predefined themes (consult `?theme_gray` for a list of all included themes). You can set a theme by adding it to an existing plot, for example:
+
+```{r}
+ggplot(data=mpg, mapping=aes(x=displ, y=hwy)) +
+    geom_point() +
+    theme_minimal()
+```
+
+It is also possible to set a theme globally using the `theme_set()` function. For example, to use `theme_dark()` for all subsequent plots, include the following expression before you create any figures:
+
+```r
+theme_set(theme_dark())
+```
+
 ## Conclusion
 
 With this set of ggplot2 building blocks, you can create a basic version of almost any kind of data visualization. In addition to the "Export" button in the RStudio "Plots" pane, you can use `ggsave()` to save a plot to a file.
