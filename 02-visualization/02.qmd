@@ -18,7 +18,7 @@ Data needs to be imported, tidied, and transformed before any visualization can 
 
 Specifically, we will use the [ggplot2](https://ggplot2.tidyverse.org/) package, which is part of the Tidyverse. It is based on a layered "grammar of graphics" described in [this article](http://vita.had.co.nz/papers/layered-grammar.pdf). In this chapter, we will mention only the most basic commands that enable you to quickly create simple (but beautiful) visualizations.
 
-Of course the first step is to activate the package:
+Of course, the first step is to activate the package:
 
 ```{r}
 library(ggplot2)
@@ -46,9 +46,9 @@ ggplot(data=mpg) +
 
 This scatterplot shows a clear negative relationship, meaning that larger engines tend to have lower fuel efficiency.
 
-All ggplot2 plots start with calling the `ggplot()` function, to which we pass a data frame that contains the data to be plotted (using the `data` argument). This function call on its own just produces an empty plot, because we haven't specified any details about our plot yet.
+Every ggplot2 plot starts with the `ggplot()` function, to which we pass a data frame that contains the data to be plotted (using the `data` argument). This function call on its own just produces an empty plot, because we haven't specified any details about our plot yet.
 
-To add something interesting to the plot, we literally *add* another layer. In this example, the new layer should contain points, which we can create with the `geom_point()` function. The ggplot2 package contains many geom functions that enable us to create many different kinds of plots. They all have a `mapping` argument, which specifies how columns in the data frame should be represented in the plot. In our example, we map the `displ` column to the `x` axis and the `hwy` column to the `y` axis, resulting in a scatterplot.
+To add something interesting to the plot, we literally *add* another layer. In this example, the new layer should contain points, which we can create with the `geom_point()` function. The ggplot2 package contains many geom functions (functions that create geometric objects representing the data) that enable us to create many different kinds of plots. They all have a `mapping` argument, which specifies how columns in the data frame should be represented in the plot. In our example, we map the `displ` column to the `x` axis and the `hwy` column to the `y` axis, resulting in a scatterplot.
 
 :::{.callout-note}
 In general, we need to wrap mappings that depend on values in the data inside an `aes()` function call.
@@ -56,7 +56,7 @@ In general, we need to wrap mappings that depend on values in the data inside an
 
 We can use the code from this example as a template for ggplot2 plots. It looks as follows:
 
-```r
+```
 ggplot(data=<DATA>) +
     <GEOM_FUNCTION>(mapping=aes(<MAPPINGS>))
 ```
@@ -67,12 +67,12 @@ Note that this template is not valid R code! We need to replace all code in angl
 ### Exercises
 
 1. What does `ggplot(data=mpg)` produce?
-2. How many rows and columns does `mpg` consist of? What are the column data types?
+2. How many rows and columns does `mpg` have? What are the column types?
 3. What does the `drv` column describe?
 4. Efficient cars should consume less fuel on both highways and in cities than inefficient cars. Create a scatterplot to investigate this hypothesis!
 5. How does highway fuel efficiency correlate with the number of cylinders?
 6. Why is the scatterplot of `class` versus `drv` not very useful?
-7. Do you see any problem with the scatterplot `displ` versus `hwy` that we produced previously? (Hint: the plot does not show all 234 individual data points contained in the `mpg` data frame.)
+7. Do you see any problem with the scatterplot `displ` versus `hwy` that we produced previously?
 
 
 ## Aesthetic mappings
@@ -294,7 +294,7 @@ See [https://r4ds.had.co.nz/data-visualisation.html#exercises-5](https://r4ds.ha
 
 ## Coordinate systems
 
-Most ggplot2 plots use the Cartesian coordinate system spanned by two axes *x* and *y*. However, it is possible to change the coordinate system with so-called *coord* functions. We won't go into any detail here, mostly because working with coordinate systems is quite an advanced topic that is not relevant for many real-world plots. However, there is one handy function that you should remember: `coord_flip()` flips the *x* and *y* axes. You can simply add it like an additional layer to an existing plot:
+Most ggplot2 plots use the Cartesian coordinate system spanned by two axes *x* and *y*. However, it is possible to change the coordinate system with so-called *coord* functions. We won't go into any detail here, mostly because working with coordinate systems is quite an advanced topic. However, there is one handy function that you should remember: `coord_flip()` flips the *x* and *y* axes. You can simply add it like an additional layer to an existing plot:
 
 ```{r}
 ggplot(data=mpg, mapping=aes(x=class, y=hwy)) +
