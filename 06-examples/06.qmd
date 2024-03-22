@@ -16,7 +16,7 @@ fig-cap-location: margin
 
 ### COVID19 in Austria
 
-[Data](https://covid19-dashboard.ages.at/data/CovidFaelle_Timeline.csv)
+[Data](covid19.csv)
 
 
 ### Austrian legislative election 2019
@@ -34,7 +34,7 @@ fig-cap-location: margin
 [Description](http://archive.ics.uci.edu/ml/datasets/Individual+household+electric+power+consumption) – [Data](http://archive.ics.uci.edu/ml/machine-learning-databases/00235/household_power_consumption.zip)
 
 
-### CO2 concentration
+### CO₂ concentration
 
 [Description](https://scrippsco2.ucsd.edu/data/atmospheric_co2/primary_mlo_co2_record.html) – [Data](https://scrippsco2.ucsd.edu/assets/data/atmospheric/stations/in_situ_co2/monthly/monthly_in_situ_co2_mlo.csv)
 
