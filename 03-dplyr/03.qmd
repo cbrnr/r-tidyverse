@@ -101,7 +101,7 @@ The `%in%` operator is a handy shortcut for chaining several comparisons with "o
 filter(flights, month %in% c(11, 12))
 ```
 
-Filtering data with `filter()` will automatically drop all `NA` values. If you want to retain missing values you need to be explicit:
+Filtering data with `filter()` will automatically drop all `NA` values. If you want to retain missing values, you need to be explicit:
 
 ```{r}
 df = tibble(x=c(1, NA, 3))
@@ -238,12 +238,12 @@ Seems like November 2013 was a good time to fly. One other thing to notice in th
 One of the key properties of Tidyverse functions is their support for the pipe operator `%>%`, which is defined in the [magrittr](https://magrittr.tidyverse.org/) package. R has gained a native pipe operator as of version 4.1. It is written as `|>` and we can use it instead of `%>%` in almost all cases. We will use the native pipe operator `|>` throughout the course material, but if you explicitly want your code to run on R versions prior to 4.1, you need to use the magrittr pipe `%>%`.
 
 :::{.callout-tip}
-In RStudio, you can use the keyboard shortcut <kbd>⌘</kbd><kbd>⇧</kbd><kbd>m</kbd> (macOS) or <kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>m</kbd> (Windows and Linux) to insert the pipe operator (you can select between the native and magrittr variants in the "Code" section of RStudio's preferences).
+In RStudio, you can use the keyboard shortcut <kbd>⌘</kbd><kbd>⇧</kbd><kbd>m</kbd> (macOS) or <kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>m</kbd> (Windows and Linux) to insert the pipe operator (you can select between the native and magrittr variants in the "Code" section of RStudio's global options).
 :::
 
 The idea behind piping is simple: instead of having to store an intermediate value in a variable, the pipe operator forwards any value as the first argument to the next function. This means that instead of writing `f(x)`, we can express the same command as `x |> f()`. For example, `mean(x)` could also be written as `x |> mean()`. This is not really helpful yet, but if we wanted to feed the result of `f(x)` into another function `g()`, instead of writing `g(f(x))` we could use a pipe `x |> f() |> g()`. That way, computations that depend on previous calculations can be written in a very intuitive way.
 
-You might be wondering why this syntactic sugar is so popular in the Tidyverse (after all, it doesn't add any new functionality). One of the main reasons is that it allows us to write code that corresponds to the flow of operations. Consider the previous example `g(f(x))`, where we take `x`, compute `f()`, and feed its result into `g()`. It is much easier to see the order of operations when we write this expression as `x |> f() |> g()`.
+You might be wondering why this syntactic sugar is so popular in the Tidyverse (after all, it doesn't add any new functionality). One of the main reasons is that it allows us to write code that corresponds to the flow of operations. Consider the previous example `g(f(x))`, where we take `x`, compute `f()`, and feed its result into `g()`. It is much easier to see the order of operations when we write `x |> f() |> g()`.
 
 If this example was too abstract, let's revisit our previous code snippet where we computed average delays grouped by month. Using the pipe operator, we can express the same calculation as follows:
 
