@@ -51,7 +51,7 @@ co2 = read_csv(
     col_names=FALSE,
     comment="\"",
     trim_ws=TRUE,
-    skip=57,
+    skip=64,
     col_types=cols(X1=col_integer(), X2=col_integer(), .default=col_double()),
     col_select=c(
         year=X1,
@@ -71,8 +71,11 @@ co2 |>
     select(date, co2:co2f_adj) |>
     ggplot(mapping=aes(x=date, y=co2)) +
     geom_line() +
+    geom_smooth(color="red") +
     geom_point(size=0.5) +
-    labs(y="CO2 concentration (ppm)") +
+    scale_x_date(date_breaks="5 years", date_labels="%Y") +
+    scale_y_continuous(n.breaks=15) +
+    labs(x=NULL, y="CO2 concentration (ppm)") +
     theme_minimal()
 ```
 
