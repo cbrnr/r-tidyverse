@@ -2,7 +2,7 @@
 title: "Real-world examples"
 subtitle: "Data wrangling in R using the Tidyverse"
 author: "Clemens Brunner"
-date: 2024-03-25
+date: 2025-04-14
 format: html
 highlight-style: github
 title-block-banner: true

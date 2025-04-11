@@ -2,7 +2,7 @@
 title: "Tidying data"
 subtitle: "Data wrangling in R using the Tidyverse"
 author: "Clemens Brunner"
-date: 2024-03-25
+date: 2025-04-14
 format: html
 highlight-style: github
 title-block-banner: true
@@ -24,7 +24,7 @@ The Tidyverse revolves around tidy data. Data can be represented in several ways
 2. Each *observation* corresponds to exactly one *row*.
 3. Each *value* corresponds to exactly one *cell*.
 
-Since these three rules are related, they can be simplified to two practical rules:
+Since these three rules are related, they can be simplified to two practical recommendations:
 
 1. Put each dataset in a tibble.
 2. Put each variable in a column.
@@ -55,7 +55,7 @@ All data frames represent exactly the same data, but only `table1` is tidy. Let'
 - `table3` combines two variables (`cases` and `population`) in one column (`rate`). In addition, the rate is represented as a character column, which makes it impossible to directly perform numeric calculations.
 - `table4a` and `table4b` are spread across two data frames, although they each contain a variable for the same observations.
 
-Here are some examples how easy it is to work with `table1`:
+Here are some examples that illustrate how easy it is to work with `table1`:
 
 ```{r message=FALSE}
 library(dplyr)
@@ -90,7 +90,7 @@ A single variable is often spread across two or more columns. This means that co
 table4a
 ```
 
-These column titles are actually two values of the variable `year`. The values in these columns are values of the variable `cases`, and therefore one row corresponds to two observations. We can tidy this representation by pivoting the two columns into one using `pivot_longer()`. To do this, we need to specify three pieces of information:
+These column titles are actually two values of the variable `year`. The values in these columns are values of the variable `cases`, and therefore one row corresponds to two observations. We can tidy this representation by pivoting the two columns into a single column using `pivot_longer()`. To do this, we need to specify three pieces of information:
 
 1. The columns which contain values instead of names (`` `1999` `` and `` `2000` `` in this case).
 2. A (new) variable name to move the column names to (we choose `year` in this example).
@@ -101,7 +101,7 @@ table4a |>
     pivot_longer(c(`1999`, `2000`), names_to="year", values_to="cases")
 ```
 
-Note that because these two columns contain names that would be a syntax error (names in R must not start with a digit), we have to enclose them with backticks. Furthermore, the type of the `year` column is character, because this is the default behavior for columns created with the `names_to` argument. If we wanted an integer column, we could use the `names_transform` argument:
+Note that because these two columns contain names that would be a syntax error (names in R must not start with a digit), we have to enclose them with backticks. Furthermore, the type of the resulting `year` column is character, because this is the default behavior for columns created with the `names_to` argument. If we wanted an integer column, we could use the `names_transform` argument:
 
 ```{r}
 tidy4a = table4a |>
@@ -126,7 +126,9 @@ tidy4b = table4b |>
 tidy4b
 ```
 
+::: {.callout-tip}
 The function is called `pivot_longer()` because it generally results in a data frame consisting of more rows and/or fewer columns than the original one (so the data frame gets "longer").
+:::
 
 Finally, we would like to combine `tidy4a` and `tidy4b` to a single data frame. We will not cover how to do that (you can read about it in the [relational data chapter](https://r4ds.had.co.nz/relational-data.html#relational-data) in R for Data Science), but just provide the relevant dplyr function call:
 

@@ -2,7 +2,7 @@
 title: "Visualization"
 subtitle: "Data wrangling in R using the Tidyverse"
 author: "Clemens Brunner"
-date: 2024-03-25
+date: 2025-04-14
 format: html
 highlight-style: github
 title-block-banner: true
@@ -14,9 +14,9 @@ fig-cap-location: margin
 
 ## Introduction
 
-Data needs to be imported, tidied, and transformed before any visualization can be created. We will discuss these steps, which are necessary for almost all real-world datasets, in the following chapters. However, because we can use tidy example datasets that are already available in R, we will focus on creating visualizations first.
+Data needs to be imported, tidied, and transformed before any visualization can be created. We will cover these steps, which are necessary for almost all real-world datasets, in the following chapters. However, because we can use tidy example datasets that are already available in R, we will focus on creating visualizations first.
 
-Specifically, we will use the [ggplot2](https://ggplot2.tidyverse.org/) package, which is part of the Tidyverse. It is based on a layered "grammar of graphics" described in [this article](http://vita.had.co.nz/papers/layered-grammar.pdf). In this chapter, we will mention only the most basic commands that enable you to quickly create simple (but beautiful) visualizations.
+Specifically, we will use the [ggplot2](https://ggplot2.tidyverse.org/) package, which is part of the Tidyverse. It is based on a layered "grammar of graphics" described in [here](http://vita.had.co.nz/papers/layered-grammar.pdf). In this chapter, we will discuss only the most basic commands that enable you to quickly create simple (but beautiful) visualizations.
 
 Of course, the first step is to activate the package:
 
@@ -24,7 +24,7 @@ Of course, the first step is to activate the package:
 library(ggplot2)
 ```
 
-Note that you could also use `library(tidyverse)` to activate all core Tidyverse packages, including ggplot2.
+Note that you could also use `library(tidyverse)` to activate all core Tidyverse packages, but I recommend to activate only the specific packages you actually need.
 
 
 ## Basic usage
@@ -44,11 +44,11 @@ ggplot(data=mpg) +
     geom_point(mapping=aes(x=displ, y=hwy))
 ```
 
-This scatterplot shows a clear negative relationship, meaning that larger engines tend to have lower fuel efficiency.
+This scatter plot shows a clear negative relationship, meaning that larger engines tend to have lower fuel efficiency.
 
 Every ggplot2 plot starts with the `ggplot()` function, to which we pass a data frame that contains the data to be plotted (using the `data` argument). This function call on its own just produces an empty plot, because we haven't specified any details about our plot yet.
 
-To add something interesting to the plot, we literally *add* another layer. In this example, the new layer should contain points, which we can create with the `geom_point()` function. The ggplot2 package contains many geom functions (functions that create geometric objects representing the data) that enable us to create many different kinds of plots. They all have a `mapping` argument, which specifies how columns in the data frame should be represented in the plot. In our example, we map the `displ` column to the `x` axis and the `hwy` column to the `y` axis, resulting in a scatterplot.
+To add something interesting to the plot, we literally *add* another layer. In this example, the new layer should contain points, which we can create with the `geom_point()` function. The ggplot2 package contains many geom functions (functions that create geometric objects representing the data) that enable us to create many different kinds of plots. They all have a `mapping` argument, which specifies how columns in the data frame should be represented in the plot. In our example, we map the `displ` column to the `x` axis and the `hwy` column to the `y` axis, resulting in a scatter plot.
 
 :::{.callout-note}
 In general, we need to wrap mappings that depend on values in the data inside an `aes()` function call.
@@ -69,15 +69,15 @@ Note that this template is not valid R code! We need to replace all code in angl
 1. What does `ggplot(data=mpg)` produce?
 2. How many rows and columns does `mpg` have? What are the column types?
 3. What does the `drv` column describe?
-4. Efficient cars should consume less fuel on both highways and in cities than inefficient cars. Create a scatterplot to investigate this hypothesis!
+4. Efficient cars should consume less fuel on both highways and in cities than inefficient cars. Create a scatter plot to investigate this hypothesis!
 5. How does highway fuel efficiency correlate with the number of cylinders?
-6. Why is the scatterplot of `class` versus `drv` not very useful?
-7. Do you see any problem with the scatterplot `displ` versus `hwy` that we produced previously?
+6. Why is the scatter plot of `class` versus `drv` not very useful?
+7. Do you see any problem with the scatter plot `displ` versus `hwy` that we produced previously?
 
 
 ## Aesthetic mappings
 
-Aesthetics are visual properties of a plot. We have already used the `x` and `y` aesthetics in our previous `mpg` example when we mapped these aesthetics to variables (columns) `displ` and `hwy` in `geom_point(mapping=aes(x=displ, y=hwy))`. We have also noted that we need to wrap aesthetic mappings with the `aes()` function.
+Aesthetics are visual properties of a plot. We have already used the `x` and `y` aesthetics in our previous `mpg` example where we mapped these aesthetics to variables (columns) `displ` and `hwy` in `geom_point(mapping=aes(x=displ, y=hwy))`. We have also noted that we need to wrap aesthetic mappings with the `aes()` function.
 
 There are other aesthetics that we could use. For example, we could map to the `color` aesthetic to visualize a third variable in the data such as `class`, which contains the type (or class) of each car:
 
@@ -86,9 +86,9 @@ ggplot(data=mpg) +
     geom_point(mapping=aes(x=displ, y=hwy, color=class))
 ```
 
-The scatterplot now conveys additional information on the types of vehicles. Notice that ggplot2 automatically adds a legend. Instead of `color`, we could also use the `shape`, `size`, or `alpha` aesthetics (try it out and see what the result looks like). The documentation of the `geom_point()` function lists all supported aesthetics. It is also possible to use multiple aesthetics for the same variable.
+The scatter plot now conveys additional information on the types of vehicles. Notice that ggplot2 automatically adds a legend. Instead of `color`, we could also use the `shape`, `size`, or `alpha` aesthetics (try it out and see what the result looks like). The documentation of the `geom_point()` function lists all supported aesthetics. It is also possible to use multiple aesthetics for the same variable.
 
-If you ever want to manually set an aesthetic to a fixed value (not depending on data values), such as plotting all points in blue, you need to specify this *outside* of `aes()`:
+If you ever want to manually set an aesthetic to a *fixed* value, such as plotting all points in blue, you need to specify this *outside* of `aes()`:
 
 ```{r}
 ggplot(data=mpg) +
@@ -127,7 +127,7 @@ See [https://r4ds.had.co.nz/data-visualisation.html#exercises-2](https://r4ds.ha
 
 ## Composing plots
 
-Facets create subplots based on subsets of the data. If instead you want to combine multiple *independent* plots, I recommend the [patchwork](https://patchwork.data-imaginist.com/) package. Using operators such as `+`, `|`, and `/`, it is intuitive to create custom arrangements of existing `ggplot` objects (which we assign to variables for easier access), for example:
+Facets create subplots based on subsets of the data. If instead you want to combine multiple *independent* plots, I recommend the [patchwork](https://patchwork.data-imaginist.com/) package. Using operators such as `+`, `|`, and `/`, it is intuitive to create custom arrangements of existing `ggplot` objects (which we assign to variables for easier access). Here's an example:
 
 ```{r}
 library(patchwork)
@@ -159,9 +159,9 @@ p2 = ggplot(data=mpg) +
 p1 | p2
 ```
 
-These plots show the same data (`displ` versus `hwy`), but they use different visual representations. Whereas the left plot visualizes each data point, the right plot represents the same data with a smoothing function. In ggplot2, we call these different visual representations *geoms* (geometric objects). The [Data Visualization cheatsheet](https://posit.co/wp-content/uploads/2022/10/data-visualization-1.pdf) lists some of the over 40 available geoms in ggplot2.
+These plots show the same data (`displ` versus `hwy`), but they use different visual representations. Whereas the left plot visualizes each data point, the right plot represents the same data with a smoothing function. In ggplot2, we call these different visual representations *geoms* (geometric objects). This [Data Visualization cheat sheet](https://posit.co/wp-content/uploads/2022/10/data-visualization-1.pdf) lists some of the over 40 available geoms in ggplot2.
 
-Every geom function takes a `mapping` argument where you specify which data columns should be mapped to which aesthetics. Note that any given geom supports only aesthetics that make sense (check the documentation to find out). For example, you can set the `shape` of a point, but the `shape` of a line does not make sense (so `geom_line()` does not support it). However, you could use the `linetype` aesthetic instead.
+Every geom function takes a `mapping` argument where you specify which data columns should be mapped to which aesthetics. Note that any given geom supports only aesthetics that make sense (check the documentation to find out). For example, you can set the `shape` of a point, but the `shape` of a line does not make sense. However, you could use the `linetype` aesthetic instead.
 
 ```{r}
 #| message: false
@@ -182,7 +182,7 @@ ggplot(data=mpg) +
     geom_smooth(mapping=aes(x=displ, y=hwy))
 ```
 
-Because both geoms use the same `mapping` argument, we can also specify a *global* `mapping` inside the `ggplot()` function call. All geoms will inherit this global mapping, and the resulting figure is identical to the previous one.
+Because both geoms use the same `mapping` argument, we can also specify a *global* `mapping` inside the `ggplot()` function call to avoid repetition. All geoms will inherit this global mapping, and the resulting figure is identical to the previous one:
 
 ```r
 ggplot(data=mpg, mapping=aes(x=displ, y=hwy)) +
@@ -216,9 +216,9 @@ ggplot(data=mpg) +
     geom_bar(mapping=aes(x=class))
 ```
 
-Notice how we only specified a mapping for the `x` aesthetic (the `class` column). However, the *y*-axis shows counts, a variable that is *not* contained in the data.
+Notice how we only specified a mapping for the `x` aesthetic (the `class` column). Interestingly, the *y*-axis shows counts, a variable that is *not* contained in the data.
 
-Although many plots show the raw data (as we saw with scatterplots), other kinds of plots *transform* the original data to show counts of the binned data (like in the bar chart), summary statistics, or predictions from a model fitted to the data. This works automatically, because each geom function is associated with a default statistical transformation. You can check the documentation of a geom to see its default transformation listed as the default argument for the `stat` parameter. For example, `geom_point()` uses `stat="identity"` (no transformation), whereas `geom_bar()` uses `stat="count"`.
+Although many plots show the raw data (as we saw with scatter plots), other kinds of plots *transform* the original data to show counts of the binned data (like in the bar chart), summary statistics, or predictions from a model fitted to the data. This works automatically, because each geom function is associated with a default statistical transformation. You can check the documentation of a geom to see its default transformation listed as the default argument for the `stat` parameter. For example, `geom_point()` uses `stat="identity"` (no transformation), whereas `geom_bar()` uses `stat="count"`.
 
 Sometimes, it is necessary to change the stat of a geom. For example, let's assume that we had the count data directly available in a data frame as follows:
 
@@ -253,7 +253,7 @@ ggplot(data=mpg_count) +
 ```
 :::
 
-Finally, since each geom function has a default stat function, and each stat function has a default geom function, we can use these functions interchangeably. For example, `geom_bar()` uses `stat_count()` and `stat_count()` uses `geom_bar()` by default. Therefore, we can also produce the bar chart we have encountered previously with the following code:
+Finally, since each geom function has a default stat function, and each stat function has a default geom function, we can use these functions interchangeably. For example, `geom_bar()` uses `stat_count()` and `stat_count()` uses `geom_bar()` by default. Therefore, we could also produce the bar chart we have encountered previously with the following code:
 
 ```{r eval=FALSE}
 ggplot(data=mpg) +
@@ -294,7 +294,7 @@ See [https://r4ds.had.co.nz/data-visualisation.html#exercises-5](https://r4ds.ha
 
 ## Coordinate systems
 
-Most ggplot2 plots use the Cartesian coordinate system spanned by two axes *x* and *y*. However, it is possible to change the coordinate system with so-called *coord* functions. We won't go into any detail here, mostly because working with coordinate systems is quite an advanced topic. However, there is one handy function that you should remember: `coord_flip()` flips the *x* and *y* axes. You can simply add it like an additional layer to an existing plot:
+Most ggplot2 plots use the Cartesian coordinate system spanned by two orthogonal axes *x* and *y*. However, it is possible to change the coordinate system with so-called *coord* functions. We won't go into any detail here, mostly because working with coordinate systems is quite an advanced topic. However, there is one handy function that you should remember: `coord_flip()` flips the *x* and *y* axes. You can simply add it like an additional layer to an existing plot:
 
 ```{r}
 ggplot(data=mpg, mapping=aes(x=class, y=hwy)) +
@@ -321,4 +321,4 @@ theme_set(theme_dark())
 
 ## Conclusion
 
-With this set of ggplot2 building blocks, you can create a basic version of almost any kind of data visualization. In addition to the "Export" button in the RStudio "Plots" pane, you can use `ggsave()` to save a plot to a file.
+With this set of ggplot2 building blocks, you can create a basic version of almost any kind of data visualization. In addition to the *Export* button in the RStudio *Plots* pane, you can use `ggsave()` to save a plot to a file.

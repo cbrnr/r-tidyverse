@@ -2,7 +2,7 @@
 title: "Importing data"
 subtitle: "Data wrangling in R using the Tidyverse"
 author: "Clemens Brunner"
-date: 2024-03-25
+date: 2025-04-14
 format: html
 highlight-style: github
 title-block-banner: true
@@ -61,16 +61,18 @@ Let's start with an example. Here's the contents of *mtcars.csv*, a rectangular 
 21.4,4,121,109,4.11,2.78,18.6,1,1,4,2
 ```
 
-Here, rectangular means that each column has the same number of elements, which is the case for most datasets. Apparently, this file also has a header row containing variable names, and columns are separated by commas. However, other text files might use different column separators (such as commas or semicolons), different decimal marks (such as a comma used in German-speaking countries as opposed to a point used in English-speaking countries), no header row, comments, and so on.
+Here, rectangular means that each column has the same number of rows, which is the case for almost any dataset. Apparently, this file also has a header row containing variable names, and columns are separated by commas. However, other text files might use different column separators (such as semicolons or tabs), different decimal marks (such as a comma used in German-speaking countries as opposed to a point used in English-speaking countries), include no header row, contain comments, and so on.
+
 
 ## The `readr` functions
+
 As usual, we start with activating the package:
 
 ```{r}
 library(readr)
 ```
 
-The most generic function for reading rectangular text data is called `read_delim()`. It has parameters to set the column delimiter, decimal mark, missing values, whether or not there is a header row, and so on. Other functions include `read_csv()`, `read_tsv()`, and `read_csv2()`, which are specialized wrappers with predefined values for some common file formats. We'll showcase how readr functions work using `read_delim()`, because all other functions behave very similarly.
+The most generic function for reading rectangular text data is called `read_delim()`. It has parameters to set the column delimiter, decimal mark, missing values, whether or not there is a header row, and so on. Other functions include `read_csv()`, `read_tsv()`, and `read_csv2()`, which are specialized wrappers with predefined values for some common file formats. We'll showcase how these functions work using `read_delim()`, because all other functions behave very similarly.
 
 
 ### The `file` and `delim` arguments
@@ -93,13 +95,15 @@ We could also use `read_csv()` to import this file, which saves us passing the c
 df = read_csv("mtcars.csv")
 ```
 
+::: {.callout-tip}
 Instead of a file name, you can also pass a character vector as the first argument:
 
 ```{r message=FALSE}
 read_delim("A,B,C\n1.1,1.3,-2.0\n5,6.3,-1.8", delim=",")
 ```
 
-This is useful to quickly generate some toy data (note that `\n` corresponds to a line break).
+This is useful to quickly generate some toy data (note that `\n` corresponds to a line break). We will use this feature in the following examples, but in practice you will usually want to import data from a file.
+:::
 
 Here is an example of data separated by semicolons. To import it, we need to set `delim=";"` accordingly.
 
@@ -116,7 +120,7 @@ Recent versions of the readr package do not even require that we pass an explici
 read_delim("mtcars.csv")
 ```
 
-In case this does not work, we can always provide the correct delimiter explicitly.
+In case this does not work, we can provide the correct delimiter explicitly, which is always the safer option anyway.
 :::
 
 
@@ -146,7 +150,7 @@ read_delim(
 )
 ```
 
-The resulting data frame is identical to the previous example where we used the regular English number format. It is also worth noting that a file cannot use the same character for both column and decimal separators. This is why the previous example used semicolons to delimit columns (because the comma is already used for the decimal mark).
+The resulting data frame is identical to the previous example, where we used the regular English number format. It is also worth noting that a file cannot use the same character for both column and decimal separators. This is why the previous example used semicolons to delimit columns (because the comma is already used for the decimal mark).
 
 :::{.callout-tip}
 The `read_csv2()` function is a shortcut to read files that use a comma as the decimal mark and a semicolon as the column separator.
